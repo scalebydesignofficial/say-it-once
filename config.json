@@ -1,0 +1,70 @@
+{
+  "pack_size": "standard",
+  "counts": {
+    "carousel": 5,
+    "quote": 10,
+    "reel": 5,
+    "short_video": 3,
+    "thread": 5,
+    "note": 5,
+    "substack_article": 3,
+    "blog": 3,
+    "email": 5,
+    "instagram_post": 5,
+    "instagram_story": 3,
+    "facebook_post": 5
+  },
+  "formats": {
+    "carousel": true,
+    "quote": true,
+    "reel": true,
+    "short_video": true,
+    "thread": true,
+    "note": true,
+    "substack_article": true,
+    "blog": true,
+    "email": true,
+    "talking_points": true,
+    "instagram_post": true,
+    "facebook_post": true
+  },
+  "cadence": {
+    "start_date": null,
+    "post_days": [
+      0,
+      1,
+      2,
+      3,
+      4,
+      5
+    ],
+    "horizon_days": 30,
+    "max_pieces_per_day": 4,
+    "slots": {
+      "morning": "8:00 AM",
+      "midday": "12:00 PM",
+      "evening": "7:00 PM"
+    }
+  },
+  "rules": {
+    "ban_em_dash": true,
+    "ban_sparkle": true,
+    "ban_words": [
+      "unlock",
+      "game changer",
+      "game-changer",
+      "manifest, babe"
+    ],
+    "ban_formal_transitions": true,
+    "warn_ai_words": true,
+    "warn_contrast_framing": true,
+    "american_spelling": true,
+    "check_scripture": false
+  },
+  "video": {
+    "enabled": true,
+    "make_slide_clips": true,
+    "make_combined": true,
+    "make_quotes": true
+  }
+}

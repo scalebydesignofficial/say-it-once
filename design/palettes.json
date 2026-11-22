@@ -1,0 +1,20 @@
+{
+  "palettes": [
+    {"name": "Soft Lavender", "mood": "Feminine, spiritual, calm",
+     "colors": {"bg": "#FBF7FC", "ink": "#2A1530", "accent": "#4A1D5C", "accent2": "#C9B2E6", "muted": "#7A6A85", "bg_dark": "#1E0F28"}},
+    {"name": "Warm Neutral", "mood": "Earthy, grounded, cozy",
+     "colors": {"bg": "#FAF6F0", "ink": "#26211C", "accent": "#A5593A", "accent2": "#EBCFB8", "muted": "#7B7068", "bg_dark": "#1C1713"}},
+    {"name": "Forest and Sage", "mood": "Fresh, steady, trustworthy",
+     "colors": {"bg": "#F6F8F3", "ink": "#1F2A22", "accent": "#2F5D45", "accent2": "#C7DCCB", "muted": "#66756B", "bg_dark": "#121C16"}},
+    {"name": "Rose and Cream", "mood": "Warm, romantic, welcoming",
+     "colors": {"bg": "#FFF8F6", "ink": "#3A1E24", "accent": "#B23A55", "accent2": "#F4C6D0", "muted": "#8B6A72", "bg_dark": "#2A1218"}},
+    {"name": "Midnight Gold", "mood": "Premium, authoritative, polished",
+     "colors": {"bg": "#F8F5EE", "ink": "#14161F", "accent": "#1B2A49", "accent2": "#E1C16E", "muted": "#6B6E7A", "bg_dark": "#0D1220"}},
+    {"name": "Ocean", "mood": "Clear, calm, professional",
+     "colors": {"bg": "#F4F9FB", "ink": "#112733", "accent": "#0E6E8C", "accent2": "#BFE3EE", "muted": "#5F7683", "bg_dark": "#0A1C26"}},
+    {"name": "Bold Berry", "mood": "Loud, confident, high energy",
+     "colors": {"bg": "#FFFFFF", "ink": "#151515", "accent": "#C8102E", "accent2": "#FFD3D9", "muted": "#6E6E6E", "bg_dark": "#111111"}},
+    {"name": "Sunshine Pop", "mood": "Bright, friendly, upbeat",
+     "colors": {"bg": "#FFFDF3", "ink": "#1D1D1B", "accent": "#F2B705", "accent2": "#FFE9A6", "muted": "#6F6C5E", "bg_dark": "#1A1A14"}}
+  ]
+}

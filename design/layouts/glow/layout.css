@@ -1,0 +1,20 @@
+.L{--fs-cover:9.8;--fs-h:7;--fs-b:4.1;--fs-q:7;--fs-li:4.2;--pad:8;background:var(--bg-dark);color:var(--on-dark)}
+.L .deco{background:radial-gradient(circle at 85% 6%,color-mix(in srgb,var(--accent) 85%,transparent) 0,transparent 46%),radial-gradient(circle at 6% 92%,color-mix(in srgb,var(--accent2) 45%,transparent) 0,transparent 44%),radial-gradient(circle at 70% 70%,color-mix(in srgb,var(--accent) 30%,transparent) 0,transparent 36%);filter:blur(calc(var(--u) * 2))}
+.L .top,.L .bottom{font-weight:600;font-size:calc(var(--u) * 2.3);letter-spacing:.14em;text-transform:uppercase;opacity:.8}
+.L .stack{background:rgba(255,255,255,.075);border:1.5px solid rgba(255,255,255,.2);-webkit-backdrop-filter:blur(16px);backdrop-filter:blur(16px);border-radius:calc(var(--u) * 5);padding:calc(var(--u) * 5.2);box-shadow:0 calc(var(--u) * 2) calc(var(--u) * 8) rgba(0,0,0,.35)}
+.L .headline{font-weight:700;letter-spacing:-.015em}
+.L .kicker{display:inline-block;align-self:flex-start;font-weight:700;letter-spacing:.16em;text-transform:uppercase;padding:calc(var(--u) * .9) calc(var(--u) * 2.4);border-radius:999px;background:linear-gradient(90deg,var(--accent),color-mix(in srgb,var(--accent) 50%,var(--accent2)));color:var(--on-accent)}
+.L strong.hl{background:linear-gradient(90deg,var(--accent2),color-mix(in srgb,var(--accent) 40%,#fff));-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;color:transparent}
+.L.slide--cover .content{justify-content:flex-end}
+.L.slide--cover .sub{opacity:.85}
+.L.slide--point .body{opacity:.9}
+.L.slide--list .items li{align-items:center;padding:calc(var(--u) * 1.8) calc(var(--u) * 2.4);background:rgba(255,255,255,.07);border-radius:calc(var(--u) * 2.4);border:1px solid rgba(255,255,255,.12)}
+.L.slide--list .n{display:inline-flex;align-items:center;justify-content:center;width:2em;height:2em;border-radius:50%;background:linear-gradient(135deg,var(--accent),var(--accent2));color:var(--on-accent);font-size:.82em;font-weight:700}
+.L.slide--quote .qtext{font-weight:600}
+.L.slide--quote .qtext::before{content:"\201C";display:block;font-size:2.6em;line-height:.55;color:var(--accent2)}
+.L.slide--stat .stat-num{background:linear-gradient(90deg,var(--accent2),color-mix(in srgb,var(--accent) 40%,#fff));-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;color:transparent}
+.L.slide--versus .vs-a{background:rgba(255,255,255,.08);color:var(--on-dark)}
+.L.slide--versus .vs-a .vs-text{text-decoration-color:rgba(255,255,255,.5)}
+.L.slide--versus .vs-b{background:linear-gradient(135deg,var(--accent),color-mix(in srgb,var(--accent) 55%,var(--accent2)));color:var(--on-accent)}
+.L.slide--checklist .box{border-color:var(--accent2);color:var(--accent2)}
+.L.slide--close .cta{background:linear-gradient(90deg,var(--accent2),#fff);color:#17141b;border-radius:999px;font-weight:700;padding:calc(var(--u) * 2) calc(var(--u) * 4.6)}

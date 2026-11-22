@@ -1,0 +1,53 @@
+{
+  "_about": "Starting themes for Carousel Studio. 'brand' is made from brand/brand.json. Any color or font can be changed per carousel in the editor.",
+  "themes": [
+    {
+      "id": "blush-editorial", "name": "Blush Editorial",
+      "colors": {"bg": "#F6EFE9", "ink": "#1E1A1A", "accent": "#B3264A", "accent2": "#EDD3D6", "muted": "#8A7B78", "paper": "#FFFDFB", "dark": "#1E1A1A", "on_dark": "#FFFFFF"},
+      "fonts": {"head": "Playfair Display", "body": "Poppins", "script": "Dancing Script"},
+      "head_weight": 400, "head_case": "lowercase", "head_track": "-0.015em", "kicker": "script", "quote_italic": true, "radius": 30
+    },
+    {
+      "id": "citrus-pop", "name": "Citrus Pop",
+      "colors": {"bg": "#FFF7EA", "ink": "#1A1A1A", "accent": "#FF6A1A", "accent2": "#FFD9A8", "muted": "#8C7F70", "paper": "#FFFFFF", "dark": "#1A1A1A", "on_dark": "#FFF7EA"},
+      "fonts": {"head": "Archivo Black", "body": "DM Sans", "script": "Caveat"},
+      "head_weight": 400, "head_case": "none", "head_track": "-0.02em", "kicker": "caps", "quote_italic": false, "radius": 34
+    },
+    {
+      "id": "sage-calm", "name": "Sage Calm",
+      "colors": {"bg": "#EEF0E7", "ink": "#25302A", "accent": "#5C7A61", "accent2": "#D2DCCB", "muted": "#7D867E", "paper": "#FAFAF4", "dark": "#25302A", "on_dark": "#F4F3EC"},
+      "fonts": {"head": "Cormorant Garamond", "body": "Lato", "script": "Caveat"},
+      "head_weight": 500, "head_case": "none", "head_track": "0", "kicker": "script", "quote_italic": true, "radius": 26
+    },
+    {
+      "id": "midnight-gold", "name": "Midnight Gold",
+      "colors": {"bg": "#131A2E", "ink": "#F3EBDD", "accent": "#D9AA52", "accent2": "#283055", "muted": "#9BA0B5", "paper": "#1C2442", "dark": "#090D1A", "on_dark": "#F3EBDD"},
+      "fonts": {"head": "DM Serif Display", "body": "Montserrat", "script": "Dancing Script"},
+      "head_weight": 400, "head_case": "none", "head_track": "-0.01em", "kicker": "caps", "quote_italic": true, "radius": 22
+    },
+    {
+      "id": "poster-red", "name": "Poster Red",
+      "colors": {"bg": "#F1EDE4", "ink": "#121212", "accent": "#E1301D", "accent2": "#F3C9BF", "muted": "#7A756C", "paper": "#FFFFFF", "dark": "#121212", "on_dark": "#F1EDE4"},
+      "fonts": {"head": "Bebas Neue", "body": "Inter", "script": "Caveat"},
+      "head_weight": 400, "head_case": "uppercase", "head_track": "0.01em", "kicker": "caps", "quote_italic": false, "radius": 8
+    },
+    {
+      "id": "lavender-journal", "name": "Lavender Journal",
+      "colors": {"bg": "#F4F0FA", "ink": "#2B2340", "accent": "#7652C6", "accent2": "#DED2F5", "muted": "#857C99", "paper": "#FFFFFF", "dark": "#2B2340", "on_dark": "#F4F0FA"},
+      "fonts": {"head": "Lora", "body": "Nunito", "script": "Caveat"},
+      "head_weight": 700, "head_case": "none", "head_track": "-0.01em", "kicker": "script", "quote_italic": true, "radius": 40
+    },
+    {
+      "id": "clean-blue", "name": "Clean Blue",
+      "colors": {"bg": "#FFFFFF", "ink": "#111418", "accent": "#2F5BFF", "accent2": "#E3E9FF", "muted": "#6B7280", "paper": "#F4F6FB", "dark": "#0E1424", "on_dark": "#FFFFFF"},
+      "fonts": {"head": "Inter", "body": "Inter", "script": "Caveat"},
+      "head_weight": 700, "head_case": "none", "head_track": "-0.03em", "kicker": "caps", "quote_italic": false, "radius": 28
+    },
+    {
+      "id": "warm-sand", "name": "Warm Sand",
+      "colors": {"bg": "#EFE4D6", "ink": "#3A2A20", "accent": "#A4532E", "accent2": "#E2CDB6", "muted": "#8E7B6B", "paper": "#F8F1E8", "dark": "#2E2019", "on_dark": "#F4EADF"},
+      "fonts": {"head": "Playfair Display", "body": "Lato", "script": "Dancing Script"},
+      "head_weight": 700, "head_case": "none", "head_track": "-0.01em", "kicker": "script", "quote_italic": true, "radius": 18
+    }
+  ]
+}

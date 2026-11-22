@@ -1,0 +1,619 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Carousel Studio</title>
+<link rel="stylesheet" href="/fonts/fonts.css">
+<link rel="stylesheet" href="/brandfonts.css">
+<link rel="stylesheet" href="/studio/layouts.css">
+<script src="/studio/layouts.js"></script>
+<style>
+  :root{--ui:#1f1d1a;--soft:#f4f1ec;--line:#e2ddd4;--mid:#8a847a;--pick:#d0461f;--panel:#fffdf9}
+  *{box-sizing:border-box}
+  html,body{margin:0;height:100%;font:14px/1.4 'DM Sans','Inter',system-ui,sans-serif;color:var(--ui);background:var(--soft)}
+  button,select,input,textarea{font:inherit;color:inherit}
+  button{cursor:pointer;border:1px solid var(--line);background:#fff;border-radius:10px;padding:8px 12px}
+  button:hover{border-color:#c9c2b6}
+  button.main{background:var(--ui);color:#fff;border-color:var(--ui);font-weight:700;padding:9px 18px}
+  button.ghost{background:transparent;border-color:transparent}
+  button.small{padding:5px 9px;font-size:12.5px;border-radius:8px}
+  .app{display:grid;grid-template-rows:58px 1fr;height:100vh}
+  header{display:flex;align-items:center;gap:14px;padding:0 18px;background:#fff;border-bottom:1px solid var(--line)}
+  header .title{font-weight:700;font-size:17px;border:1px solid transparent;border-radius:8px;padding:5px 8px;min-width:220px;background:transparent}
+  header .title:hover,header .title:focus{border-color:var(--line);outline:none}
+  header .saved{color:var(--mid);font-size:12.5px}
+  header .sp{flex:1}
+  .body{display:grid;grid-template-columns:200px 1fr 380px;min-height:0}
+  /* slide strip */
+  .strip{overflow:auto;padding:14px 12px 30px;border-right:1px solid var(--line);background:#faf8f4}
+  .thumb{position:relative;margin:0 auto 14px;width:162px;cursor:pointer}
+  .thumb .tv{width:162px;height:202.5px;overflow:hidden;border-radius:8px;position:relative;box-shadow:0 2px 8px rgba(0,0,0,.12);outline:3px solid transparent;outline-offset:2px}
+  .thumb.on .tv{outline-color:var(--pick)}
+  .thumb .tv>.sio{transform:scale(.15);transform-origin:0 0;position:absolute;left:0;top:0;pointer-events:none}
+  .thumb .n{position:absolute;left:-6px;top:-6px;background:var(--ui);color:#fff;border-radius:999px;font-size:11.5px;font-weight:700;min-width:22px;height:22px;
+    display:flex;align-items:center;justify-content:center;z-index:2}
+  .thumb .r{font-size:11.5px;color:var(--mid);text-align:center;margin-top:5px}
+  .thumb.drop-before .tv{box-shadow:0 -5px 0 var(--pick)}
+  .thumb.drop-after .tv{box-shadow:0 5px 0 var(--pick)}
+  .strip .add{width:162px;margin:4px auto;display:block}
+  /* stage */
+  .stagewrap{display:flex;flex-direction:column;align-items:center;justify-content:flex-start;overflow:auto;padding:22px 20px 40px;min-width:0}
+  .tools{display:flex;gap:8px;margin-bottom:14px;flex-wrap:wrap;justify-content:center}
+  .frame{position:relative;box-shadow:0 10px 40px rgba(0,0,0,.16);border-radius:6px;overflow:hidden;flex:none}
+  .frame>.sio{transform-origin:0 0;position:absolute;left:0;top:0}
+  .hint{color:var(--mid);font-size:12.5px;margin-top:12px;text-align:center;max-width:560px}
+  /* panel */
+  .panel{border-left:1px solid var(--line);background:var(--panel);display:flex;flex-direction:column;min-height:0}
+  .tabs{display:flex;border-bottom:1px solid var(--line);padding:0 8px}
+  .tabs button{border:0;border-bottom:2px solid transparent;border-radius:0;background:transparent;padding:14px 9px 12px;color:var(--mid);font-weight:600}
+  .tabs button.on{color:var(--ui);border-bottom-color:var(--pick)}
+  .pane{overflow:auto;padding:16px 16px 40px;flex:1}
+  .pane h3{font-size:12px;letter-spacing:.12em;text-transform:uppercase;color:var(--mid);margin:18px 0 10px}
+  .pane h3:first-child{margin-top:0}
+  .lgrid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
+  .lt{cursor:pointer;text-align:center;font-size:11.5px;color:#555}
+  .lt .tv{width:100%;aspect-ratio:4/5;overflow:hidden;border-radius:6px;position:relative;box-shadow:0 1px 5px rgba(0,0,0,.12);outline:2px solid transparent;outline-offset:2px}
+  .lt.on .tv{outline-color:var(--pick)}
+  .lt .tv>.sio{transform-origin:0 0;position:absolute;left:0;top:0;pointer-events:none}
+  .lt div.nm{margin-top:4px}
+  .chips{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:12px}
+  .chips button{padding:5px 10px;font-size:12.5px;border-radius:999px}
+  .chips button.on{background:var(--ui);color:#fff;border-color:var(--ui)}
+  label.f{display:block;margin-bottom:12px}
+  label.f span{display:block;font-size:12.5px;font-weight:600;margin-bottom:5px}
+  label.f textarea,label.f input[type=text],label.f select{width:100%;border:1px solid var(--line);border-radius:9px;padding:8px 10px;background:#fff}
+  label.f textarea{resize:vertical;min-height:44px}
+  .row2{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+  .colors{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
+  .colors label{font-size:12px;display:flex;flex-direction:column;gap:4px}
+  .colors input{width:100%;height:36px;border:1px solid var(--line);border-radius:8px;padding:2px;background:#fff}
+  .pgrid{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
+  .pgrid .p{aspect-ratio:4/5;border-radius:6px;overflow:hidden;cursor:pointer;position:relative;outline:2px solid transparent;outline-offset:2px;background:#eee}
+  .pgrid .p img{width:100%;height:100%;object-fit:cover;display:block}
+  .pgrid .p.on{outline-color:var(--pick)}
+  .drop{border:2px dashed var(--line);border-radius:12px;padding:18px;text-align:center;color:var(--mid);margin-bottom:12px;cursor:pointer}
+  .drop.over{border-color:var(--pick);color:var(--pick)}
+  .muted{color:var(--mid);font-size:12.5px}
+  .check{display:flex;align-items:center;gap:8px;margin:6px 0}
+  .btnrow{display:flex;gap:8px;flex-wrap:wrap;margin:8px 0}
+  input[type=range]{width:100%}
+  /* export sheet */
+  .modal{position:fixed;inset:0;background:rgba(20,18,15,.45);display:flex;align-items:center;justify-content:center;z-index:50}
+  .modal .box{background:#fff;border-radius:16px;padding:24px;width:min(860px,92vw);max-height:90vh;overflow:auto}
+  .modal h2{margin:0 0 6px;font-size:20px}
+  .modal img{max-width:100%;border-radius:10px;border:1px solid var(--line);margin:12px 0}
+  .spin{width:34px;height:34px;border-radius:50%;border:4px solid var(--line);border-top-color:var(--pick);animation:sp 1s linear infinite;margin:14px auto}
+  @keyframes sp{to{transform:rotate(360deg)}}
+  .toast{position:fixed;bottom:22px;left:50%;transform:translateX(-50%);background:var(--ui);color:#fff;padding:10px 16px;border-radius:10px;font-size:13px;opacity:0;transition:.25s;pointer-events:none;z-index:60}
+  .toast.show{opacity:1}
+</style>
+</head>
+<body>
+<div class="app">
+  <header>
+    <strong style="font-size:15px">Carousel Studio</strong>
+    <input class="title" id="title" placeholder="Name this carousel">
+    <span class="saved" id="saved">Saved</span>
+    <span class="sp"></span>
+    <button class="ghost" id="undo" title="Undo (Cmd/Ctrl+Z)">Undo</button>
+    <select id="fmt" title="Image type"><option value="png">PNG</option><option value="jpg">JPG</option></select>
+    <button class="main" id="export">Export slides + caption</button>
+  </header>
+  <div class="body">
+    <div class="strip" id="strip"></div>
+    <div class="stagewrap" id="stagewrap">
+      <div class="tools">
+        <button class="small" id="prev">Back</button>
+        <button class="small" id="next">Next</button>
+        <button class="small" id="dup">Duplicate slide</button>
+        <button class="small" id="del">Delete slide</button>
+      </div>
+      <div class="frame" id="frame"></div>
+      <div class="hint">Click any words on the slide to change them. Wrap a word in **double stars** to color it. Drag a photo to move it, scroll on it to zoom. Drag slides on the left to reorder.</div>
+    </div>
+    <div class="panel">
+      <div class="tabs" id="tabs">
+        <button data-tab="layout" class="on">Layout</button>
+        <button data-tab="words">Words</button>
+        <button data-tab="photo">Photo</button>
+        <button data-tab="look">Theme</button>
+        <button data-tab="caption">Caption</button>
+      </div>
+      <div class="pane" id="pane"></div>
+    </div>
+  </div>
+</div>
+<div class="toast" id="toast"></div>
+
+<script>
+const CS = window.CarouselStudio;
+const $ = s => document.querySelector(s);
+const ROLE_NAMES = {cover:"Cover", point:"Point", list:"List", quote:"Quote", stat:"Number", compare:"Compare", close:"Closer"};
+const FIELD_LABELS = {kicker:"Small label", headline:"Headline", body:"Body", sub:"Small line (name, reference)", items:"List items (one per line)",
+  number:"Number", left_label:"First label", left:"First side", right_label:"Second label", right:"Second side", cta:"Comment word / button"};
+let S = {plan:null, themes:[], photos:[], ctx:{}, fonts:[], cur:0, tab:"layout", group:"All", photoKey:"photo"};
+let history = [], saveTimer = null;
+
+/* ---------- data helpers ---------- */
+function slide(){ return S.plan.slides[S.cur]; }
+function theme(){
+  const base = S.themes.find(t => t.id === (S.plan.theme || "brand")) || S.themes[0];
+  const t = JSON.parse(JSON.stringify(base));
+  const o = S.plan.theme_overrides || {};
+  for (const k in o){
+    if (o[k] && typeof o[k] === "object") t[k] = Object.assign({}, t[k] || {}, Object.fromEntries(Object.entries(o[k]).filter(([,v]) => v)));
+    else if (o[k] !== "" && o[k] != null) t[k] = o[k];
+  }
+  return t;
+}
+function ctx(i, edit){
+  return Object.assign({}, S.ctx, {
+    i, n:S.plan.slides.length, theme:theme(), edit:!!edit,
+    show_handle:S.plan.show_handle !== false, show_numbers:S.plan.show_numbers !== false, show_swipe:S.plan.show_swipe !== false,
+    photoUrl:n => "/photo/" + encodeURIComponent(n)
+  });
+}
+function snapshot(){ history.push(JSON.stringify(S.plan)); if (history.length > 80) history.shift(); }
+function commit(opts){
+  opts = opts || {};
+  $("#saved").textContent = "Saving…";
+  clearTimeout(saveTimer);
+  saveTimer = setTimeout(save, 500);
+  if (!opts.keepStage) drawStage();
+  drawStrip();
+  if (opts.panel) drawPanel();
+}
+async function save(){
+  try{
+    const r = await fetch("/api/save", {method:"POST", body:JSON.stringify(S.plan)});
+    $("#saved").textContent = r.ok ? "Saved" : "Not saved, try again";
+  }catch(e){ $("#saved").textContent = "Not saved. Is the editor still running?"; }
+}
+function toast(msg){ const t = $("#toast"); t.textContent = msg; t.classList.add("show"); setTimeout(() => t.classList.remove("show"), 2200); }
+function getF(s, f){ const p = f.split("."); let v = s[p[0]]; if (p.length > 1) v = (v || [])[+p[1]]; return v; }
+function setF(s, f, val){
+  const p = f.split(".");
+  if (p.length > 1){ s[p[0]] = s[p[0]] || []; s[p[0]][+p[1]] = val; }
+  else s[p[0]] = val;
+}
+
+/* ---------- drawing ---------- */
+function mount(el, s, c, scale){
+  el.innerHTML = CS.render(s, c, S.plan);
+  const node = el.firstElementChild;
+  if (scale) node.style.transform = "scale(" + scale + ")";
+  CS.fit(node);
+  return node;
+}
+function stageScale(){
+  const wrap = $("#stagewrap");
+  const h = wrap.clientHeight - 120, w = wrap.clientWidth - 40;
+  return Math.max(.25, Math.min(.62, h / 1350, w / 1080));
+}
+function drawStage(){
+  const sc = stageScale();
+  const f = $("#frame");
+  f.style.width = (1080 * sc) + "px"; f.style.height = (1350 * sc) + "px";
+  const node = mount(f, slide(), ctx(S.cur, true), sc);
+  wireStage(node, sc);
+}
+function drawStrip(){
+  const strip = $("#strip");
+  strip.innerHTML = "";
+  S.plan.slides.forEach((s, i) => {
+    const d = document.createElement("div");
+    d.className = "thumb" + (i === S.cur ? " on" : "");
+    d.draggable = true;
+    d.innerHTML = '<div class="n">' + (i + 1) + '</div><div class="tv"></div><div class="r">' + (ROLE_NAMES[s.role] || "Slide") + " · " +
+      (CS.BY_ID[CS.layoutFor(s, S.plan)] || {}).name + "</div>";
+    mount(d.querySelector(".tv"), s, ctx(i, false), .15);
+    d.onclick = () => { S.cur = i; drawAll(); };
+    d.ondragstart = e => { e.dataTransfer.setData("text/plain", i); d.style.opacity = .4; };
+    d.ondragend = () => d.style.opacity = 1;
+    d.ondragover = e => {
+      e.preventDefault();
+      const after = e.offsetY > d.offsetHeight / 2;
+      d.classList.toggle("drop-after", after); d.classList.toggle("drop-before", !after);
+    };
+    d.ondragleave = () => d.classList.remove("drop-after", "drop-before");
+    d.ondrop = e => {
+      e.preventDefault();
+      d.classList.remove("drop-after", "drop-before");
+      const from = +e.dataTransfer.getData("text/plain");
+      let to = i + (e.offsetY > d.offsetHeight / 2 ? 1 : 0);
+      if (from === to || from + 1 === to) return;
+      snapshot();
+      const [m] = S.plan.slides.splice(from, 1);
+      if (from < to) to--;
+      S.plan.slides.splice(to, 0, m);
+      S.cur = to;
+      commit({panel:true});
+    };
+    strip.appendChild(d);
+  });
+  const add = document.createElement("select");
+  add.className = "add";
+  add.innerHTML = '<option value="">+ Add a slide</option>' + CS.ROLES.map(r => '<option value="' + r + '">' + ROLE_NAMES[r] + "</option>").join("");
+  add.style.cssText = "width:162px;display:block;margin:6px auto;border:1px dashed #c9c2b6;border-radius:10px;padding:9px;background:#fff";
+  add.onchange = () => {
+    if (!add.value) return;
+    snapshot();
+    S.plan.slides.splice(S.cur + 1, 0, {role:add.value});
+    S.cur++;
+    commit({panel:true});
+    S.tab = "layout"; drawPanel();
+  };
+  strip.appendChild(add);
+}
+function drawAll(){ drawStage(); drawStrip(); drawPanel(); }
+
+/* ---------- editing on the slide ---------- */
+function wireStage(node, sc){
+  node.querySelectorAll("[data-field]").forEach(el => {
+    el.contentEditable = "true";
+    el.spellcheck = true;
+    el.addEventListener("focus", () => {
+      snapshot();
+      el.textContent = getF(slide(), el.dataset.field) || "";
+      el.classList.remove("is-empty");
+    });
+    el.addEventListener("input", () => {
+      setF(slide(), el.dataset.field, el.innerText.replace(/\n$/, ""));
+      CS.fit(node);
+      $("#saved").textContent = "Saving…";
+      clearTimeout(saveTimer); saveTimer = setTimeout(save, 700);
+    });
+    el.addEventListener("keydown", e => {
+      const f = el.dataset.field;
+      if (e.key === "Escape") el.blur();
+      if (f.startsWith("items.") && e.key === "Enter"){
+        e.preventDefault();
+        const k = +f.split(".")[1];
+        slide().items = slide().items || [];
+        slide().items.splice(k + 1, 0, "");
+        el.blur();
+        setTimeout(() => focusField("items." + (k + 1)), 30);
+      } else if (f.startsWith("items.") && e.key === "Backspace" && !el.innerText.trim() && (slide().items || []).length > 1){
+        e.preventDefault();
+        const k = +f.split(".")[1];
+        slide().items.splice(k, 1);
+        el.blur();
+        setTimeout(() => focusField("items." + Math.max(0, k - 1)), 30);
+      } else if (e.key === "Enter" && !e.shiftKey && !["body", "sub"].includes(f)){
+        e.preventDefault(); el.blur();
+      }
+    });
+    el.addEventListener("blur", () => {
+      commit();
+      if (S.tab === "words") drawPanel();
+    });
+    el.addEventListener("paste", e => {
+      e.preventDefault();
+      document.execCommand("insertText", false, (e.clipboardData || window.clipboardData).getData("text/plain"));
+    });
+  });
+  node.querySelectorAll("[data-photo]").forEach(ph => {
+    const key = ph.dataset.photo;
+    ph.addEventListener("mousedown", e => {
+      const img = ph.querySelector("img");
+      if (!img) return;
+      e.preventDefault();
+      const p = normPhoto(key);
+      DRAG = {ph, key, x:e.clientX, y:e.clientY, px:p.x, py:p.y, w:ph.offsetWidth * sc, h:ph.offsetHeight * sc, moved:false};
+      snapshot();
+    });
+    ph.addEventListener("click", () => { if (!ph.querySelector("img")) openPhoto(key); });
+    ph.addEventListener("wheel", e => {
+      if (!ph.querySelector("img")) return;
+      e.preventDefault();
+      const p = normPhoto(key);
+      p.zoom = Math.max(1, Math.min(3, +(p.zoom || 1) - e.deltaY * 0.002));
+      ph.querySelector("img").style.transform = "scale(" + p.zoom + ")";
+      clearTimeout(saveTimer); saveTimer = setTimeout(() => { save(); drawStrip(); if (S.tab === "photo") drawPanel(); }, 400);
+    }, {passive:false});
+  });
+}
+let DRAG = null;
+window.addEventListener("mousemove", e => {
+  if (!DRAG) return;
+  const dx = e.clientX - DRAG.x, dy = e.clientY - DRAG.y;
+  if (Math.abs(dx) + Math.abs(dy) > 3) DRAG.moved = true;
+  const p = normPhoto(DRAG.key);
+  p.x = Math.round(Math.max(0, Math.min(100, DRAG.px - dx / DRAG.w * 100)));
+  p.y = Math.round(Math.max(0, Math.min(100, DRAG.py - dy / DRAG.h * 100)));
+  const img = DRAG.ph.querySelector("img");
+  img.style.objectPosition = p.x + "% " + p.y + "%";
+  img.style.transformOrigin = p.x + "% " + p.y + "%";
+});
+window.addEventListener("mouseup", () => {
+  if (!DRAG) return;
+  const d = DRAG; DRAG = null;
+  if (d.moved){ commit({keepStage:true}); if (S.tab === "photo") drawPanel(); }
+  else { history.pop(); openPhoto(d.key); }
+});
+function focusField(f){
+  drawStage();
+  const el = $("#frame").querySelector('[data-field="' + f + '"]');
+  if (el){ el.focus(); }
+}
+function normPhoto(key){
+  const s = slide();
+  let p = s[key];
+  if (typeof p === "string") p = s[key] = {src:p};
+  p = p || (s[key] = {});
+  if (p.x == null) p.x = 50; if (p.y == null) p.y = 50; if (!p.zoom) p.zoom = 1;
+  return p;
+}
+function openPhoto(key){ S.photoKey = key || "photo"; S.tab = "photo"; drawPanel(); }
+
+/* ---------- right panel ---------- */
+function drawPanel(){
+  document.querySelectorAll("#tabs button").forEach(b => b.classList.toggle("on", b.dataset.tab === S.tab));
+  const pane = $("#pane");
+  pane.innerHTML = "";
+  ({layout:paneLayout, words:paneWords, photo:panePhoto, look:paneLook, caption:paneCaption})[S.tab](pane);
+}
+
+function paneLayout(pane){
+  const s = slide();
+  const curId = CS.layoutFor(s, S.plan);
+  const groups = ["All", "Fits this slide"].concat([...new Set(CS.LAYOUTS.map(d => d.group))]);
+  pane.innerHTML = '<h3>Layout for slide ' + (S.cur + 1) + '</h3><div class="chips" id="chips"></div><div class="lgrid" id="lgrid"></div>' +
+    '<h3>Kind of slide</h3><label class="f"><select id="role">' + CS.ROLES.map(r => '<option value="' + r + '"' + (r === s.role ? " selected" : "") + ">" + ROLE_NAMES[r] + "</option>").join("") +
+    '</select></label><div class="btnrow"><button id="allrole">Use this layout on every ' + (ROLE_NAMES[s.role] || "slide").toLowerCase() + ' slide</button>' +
+    '<button id="fromlook">Back to the look\'s pick</button></div>';
+  const chips = pane.querySelector("#chips");
+  groups.forEach(g => {
+    const b = document.createElement("button");
+    b.textContent = g; b.className = g === S.group ? "on" : "";
+    b.onclick = () => { S.group = g; drawPanel(); };
+    chips.appendChild(b);
+  });
+  const grid = pane.querySelector("#lgrid");
+  const list = CS.LAYOUTS.filter(d => S.group === "All" || d.group === S.group || (S.group === "Fits this slide" && d.roles.includes(s.role)));
+  const w = (pane.clientWidth - 32 - 20) / 3;
+  list.forEach(d => {
+    const t = document.createElement("div");
+    t.className = "lt" + (d.id === curId ? " on" : "");
+    t.innerHTML = '<div class="tv"></div><div class="nm">' + d.name + "</div>";
+    grid.appendChild(t);
+    const trial = Object.assign({}, s, {layout:d.id});
+    mount(t.querySelector(".tv"), trial, ctx(S.cur, false), w / 1080);
+    t.onclick = () => { snapshot(); s.layout = d.id; commit({panel:true}); };
+  });
+  pane.querySelector("#role").onchange = e => { snapshot(); s.role = e.target.value; commit({panel:true}); };
+  pane.querySelector("#allrole").onclick = () => {
+    snapshot();
+    S.plan.slides.forEach(x => { if (x.role === s.role) x.layout = curId; });
+    commit({panel:true}); toast("Done. Every " + (ROLE_NAMES[s.role] || "").toLowerCase() + " slide uses " + CS.BY_ID[curId].name);
+  };
+  pane.querySelector("#fromlook").onclick = () => { snapshot(); delete s.layout; commit({panel:true}); };
+}
+
+function paneWords(pane){
+  const s = slide();
+  const d = CS.BY_ID[CS.layoutFor(s, S.plan)];
+  const fields = d.fields.filter(f => !f.startsWith("photo"));
+  pane.innerHTML = "<h3>Words on slide " + (S.cur + 1) + "</h3>";
+  fields.forEach(f => {
+    const lab = document.createElement("label");
+    lab.className = "f";
+    const val = f === "items" ? (s.items || []).join("\n") : (s[f] || "");
+    const big = ["body", "headline", "items", "left", "right"].includes(f);
+    lab.innerHTML = "<span>" + FIELD_LABELS[f] + "</span>" + (big ? "<textarea rows=\"" + (f === "items" ? 6 : 3) + "\"></textarea>" : '<input type="text">');
+    const inp = lab.querySelector("textarea,input");
+    inp.value = val;
+    inp.placeholder = CS.FIELD_HINTS[f] || "";
+    inp.onfocus = () => snapshot();
+    inp.oninput = () => {
+      if (f === "items") s.items = inp.value.split("\n").filter((x, i, a) => x.trim() || i < a.length - 1);
+      else s[f] = inp.value;
+      commit();
+    };
+    pane.appendChild(lab);
+  });
+  const other = Object.keys(FIELD_LABELS).filter(f => !fields.includes(f) && s[f] && (Array.isArray(s[f]) ? s[f].length : true));
+  if (other.length){
+    const p = document.createElement("p");
+    p.className = "muted";
+    p.textContent = "Kept for other layouts: " + other.map(f => FIELD_LABELS[f].replace(/ \(.*\)/, "").toLowerCase()).join(", ") + ". They come back if you switch layouts.";
+    pane.appendChild(p);
+  }
+  const tip = document.createElement("p");
+  tip.className = "muted";
+  tip.textContent = "Tip: wrap a word in **double stars** to color it.";
+  pane.appendChild(tip);
+}
+
+function panePhoto(pane){
+  const s = slide();
+  const d = CS.BY_ID[CS.layoutFor(s, S.plan)];
+  if (!d.photos){
+    pane.innerHTML = '<h3>Photo</h3><p class="muted">This layout has no photo spot. Pick a photo layout (Layout tab, "Photo-led") to use one.</p>';
+    return;
+  }
+  const keys = d.photos > 1 ? ["photo", "photo2"] : ["photo"];
+  if (!keys.includes(S.photoKey)) S.photoKey = "photo";
+  const key = S.photoKey;
+  const p = s[key];
+  const src = p && (typeof p === "string" ? p : p.src);
+  let h = "<h3>Photo on slide " + (S.cur + 1) + "</h3>";
+  if (keys.length > 1) h += '<div class="chips">' + keys.map(k => '<button data-k="' + k + '" class="' + (k === key ? "on" : "") + '">' + (k === "photo" ? "Top photo" : "Bottom photo") + "</button>").join("") + "</div>";
+  if (src){
+    const n = normPhoto(key);
+    h += '<label class="f"><span>Zoom</span><input type="range" id="zoom" min="1" max="3" step="0.01" value="' + n.zoom + '"></label>' +
+      '<div class="row2"><label class="f"><span>Left / right</span><input type="range" id="px" min="0" max="100" value="' + n.x + '"></label>' +
+      '<label class="f"><span>Up / down</span><input type="range" id="py" min="0" max="100" value="' + n.y + '"></label></div>' +
+      '<div class="btnrow"><button id="center">Re-center</button><button id="remove">Remove photo</button><button id="allp">Use on every photo slide</button></div>';
+  }
+  h += '<h3>Your photos</h3><div class="drop" id="drop">Drop photos here, or click to choose</div><input type="file" id="file" accept="image/*" multiple hidden><div class="pgrid" id="pgrid"></div>';
+  if (!S.photos.length) h += '<p class="muted">No photos yet. Add some above, or put them in this carousel\'s photos folder.</p>';
+  pane.innerHTML = h;
+  pane.querySelectorAll("[data-k]").forEach(b => b.onclick = () => { S.photoKey = b.dataset.k; drawPanel(); });
+  const grid = pane.querySelector("#pgrid");
+  S.photos.forEach(name => {
+    const el = document.createElement("div");
+    el.className = "p" + (name === src ? " on" : "");
+    el.title = name;
+    el.innerHTML = '<img loading="lazy" src="/photo/' + encodeURIComponent(name) + '">';
+    el.onclick = () => { snapshot(); s[key] = {src:name, x:50, y:35, zoom:1}; commit({panel:true}); };
+    grid.appendChild(el);
+  });
+  if (src){
+    const n = normPhoto(key);
+    const live = () => { drawStage(); clearTimeout(saveTimer); saveTimer = setTimeout(() => { save(); drawStrip(); }, 400); };
+    pane.querySelector("#zoom").onfocus = pane.querySelector("#px").onfocus = pane.querySelector("#py").onfocus = () => snapshot();
+    pane.querySelector("#zoom").oninput = e => { n.zoom = +e.target.value; live(); };
+    pane.querySelector("#px").oninput = e => { n.x = +e.target.value; live(); };
+    pane.querySelector("#py").oninput = e => { n.y = +e.target.value; live(); };
+    pane.querySelector("#center").onclick = () => { snapshot(); Object.assign(n, {x:50, y:50, zoom:1}); commit({panel:true}); };
+    pane.querySelector("#remove").onclick = () => { snapshot(); delete s[key]; commit({panel:true}); };
+    pane.querySelector("#allp").onclick = () => {
+      snapshot();
+      S.plan.slides.forEach(x => { if ((CS.BY_ID[CS.layoutFor(x, S.plan)] || {}).photos) x.photo = Object.assign({}, n); });
+      commit({panel:true}); toast("That photo is on every photo slide now");
+    };
+  }
+  const drop = pane.querySelector("#drop"), file = pane.querySelector("#file");
+  drop.onclick = () => file.click();
+  drop.ondragover = e => { e.preventDefault(); drop.classList.add("over"); };
+  drop.ondragleave = () => drop.classList.remove("over");
+  drop.ondrop = e => { e.preventDefault(); drop.classList.remove("over"); upload(e.dataTransfer.files, key); };
+  file.onchange = () => upload(file.files, key);
+}
+async function upload(files, key){
+  let last = null;
+  for (const f of files){
+    if (!/\.(jpe?g|png|webp)$/i.test(f.name)){ toast(f.name + " isn't a photo I can use (jpg, png or webp)"); continue; }
+    toast("Adding " + f.name + "…");
+    const r = await fetch("/api/upload?name=" + encodeURIComponent(f.name), {method:"POST", body:f});
+    const j = await r.json();
+    if (j.ok){ S.photos = j.photos; last = j.name; } else toast(j.error || "That photo didn't upload");
+  }
+  if (last){ snapshot(); slide()[key] = {src:last, x:50, y:35, zoom:1}; commit({panel:true}); }
+}
+
+function paneLook(pane){
+  const t = theme();
+  const o = S.plan.theme_overrides = S.plan.theme_overrides || {};
+  const colorKeys = [["bg", "Background"], ["ink", "Text"], ["accent", "Accent"], ["accent2", "Soft accent"], ["paper", "Cards"], ["dark", "Dark slides"]];
+  const fontSel = (id, cur) => '<select id="' + id + '">' + S.fonts.map(f => '<option' + (f === cur ? " selected" : "") + ">" + f + "</option>").join("") + "</select>";
+  const toHex = v => /^#[0-9a-f]{6}$/i.test(v || "") ? v : "#cccccc";
+  pane.innerHTML =
+    '<h3>Theme</h3><label class="f"><select id="theme">' + S.themes.map(x => '<option value="' + x.id + '"' + (x.id === (S.plan.theme || "brand") ? " selected" : "") + ">" + x.name + "</option>").join("") + "</select></label>" +
+    '<h3>Colors</h3><div class="colors">' + colorKeys.map(([k, n]) => '<label>' + n + '<input type="color" data-c="' + k + '" value="' + toHex((t.colors || {})[k]) + '"></label>').join("") + "</div>" +
+    '<h3>Fonts</h3><label class="f"><span>Headlines</span>' + fontSel("fh", t.fonts.head) + '</label><label class="f"><span>Body text</span>' + fontSel("fb", t.fonts.body) +
+    '</label><label class="f"><span>Script / handwriting</span>' + fontSel("fs", t.fonts.script) + "</label>" +
+    '<div class="row2"><label class="f"><span>Headline letters</span><select id="hc">' + [["none", "As typed"], ["lowercase", "all lowercase"], ["uppercase", "ALL CAPS"]].map(([v, n]) => '<option value="' + v + '"' + (v === t.head_case ? " selected" : "") + ">" + n + "</option>").join("") +
+    '</select></label><label class="f"><span>Small labels</span><select id="ks">' + [["script", "Handwritten"], ["caps", "Small caps"]].map(([v, n]) => '<option value="' + v + '"' + (v === (t.kicker || "script") ? " selected" : "") + ">" + n + "</option>").join("") + "</select></label></div>" +
+    '<div class="btnrow"><button id="reset">Reset to the theme\'s colors and fonts</button></div>' +
+    '<h3>Starting layouts</h3><label class="f"><select id="look">' + Object.keys(CS.LOOKS).map(k => '<option value="' + k + '"' + (k === (S.plan.look || "editorial") ? " selected" : "") + ">" + CS.LOOKS[k].name + "</option>").join("") +
+    '</select></label><p class="muted">Slides you haven\'t picked a layout for follow this look.</p><div class="btnrow"><button id="applylook">Use this look on every slide</button></div>' +
+    '<h3>On every slide</h3>' +
+    '<label class="check"><input type="checkbox" id="sh"' + (S.plan.show_handle !== false ? " checked" : "") + "> Show my handle</label>" +
+    '<label class="check"><input type="checkbox" id="sn"' + (S.plan.show_numbers !== false ? " checked" : "") + "> Show slide numbers</label>" +
+    '<label class="check"><input type="checkbox" id="ss"' + (S.plan.show_swipe !== false ? " checked" : "") + "> Show the swipe arrow</label>";
+  const q = s => pane.querySelector(s);
+  q("#theme").onchange = e => { snapshot(); S.plan.theme = e.target.value; S.plan.theme_overrides = {}; commit({panel:true}); };
+  pane.querySelectorAll("[data-c]").forEach(inp => {
+    inp.onfocus = () => snapshot();
+    inp.oninput = () => { o.colors = o.colors || {}; o.colors[inp.dataset.c] = inp.value; if (inp.dataset.c === "accent") delete o.colors.on_accent; drawStage(); };
+    inp.onchange = () => commit();
+  });
+  const fset = (k, v) => { snapshot(); o.fonts = o.fonts || {}; o.fonts[k] = v; commit(); };
+  q("#fh").onchange = e => fset("head", e.target.value);
+  q("#fb").onchange = e => fset("body", e.target.value);
+  q("#fs").onchange = e => fset("script", e.target.value);
+  q("#hc").onchange = e => { snapshot(); o.head_case = e.target.value; commit(); };
+  q("#ks").onchange = e => { snapshot(); o.kicker = e.target.value; commit(); };
+  q("#reset").onclick = () => { snapshot(); S.plan.theme_overrides = {}; commit({panel:true}); };
+  q("#look").onchange = e => { snapshot(); S.plan.look = e.target.value; commit(); };
+  q("#applylook").onclick = () => { snapshot(); S.plan.slides.forEach(x => delete x.layout); commit({panel:true}); toast("Every slide follows the " + CS.LOOKS[S.plan.look || "editorial"].name + " look"); };
+  q("#sh").onchange = e => { snapshot(); S.plan.show_handle = e.target.checked; commit(); };
+  q("#sn").onchange = e => { snapshot(); S.plan.show_numbers = e.target.checked; commit(); };
+  q("#ss").onchange = e => { snapshot(); S.plan.show_swipe = e.target.checked; commit(); };
+}
+
+function paneCaption(pane){
+  pane.innerHTML = '<h3>Caption</h3><label class="f"><textarea id="cap" rows="16" placeholder="The words that go under your post"></textarea></label>' +
+    '<div class="btnrow"><button id="copy">Copy caption</button></div><p class="muted" id="count"></p>';
+  const cap = pane.querySelector("#cap");
+  cap.value = S.plan.caption || "";
+  const count = () => pane.querySelector("#count").textContent = cap.value.length + " characters (Instagram allows 2,200)";
+  count();
+  cap.onfocus = () => snapshot();
+  cap.oninput = () => { S.plan.caption = cap.value; count(); $("#saved").textContent = "Saving…"; clearTimeout(saveTimer); saveTimer = setTimeout(save, 600); };
+  pane.querySelector("#copy").onclick = async () => {
+    try{ await navigator.clipboard.writeText(cap.value); toast("Caption copied"); }
+    catch(e){ cap.select(); document.execCommand("copy"); toast("Caption copied"); }
+  };
+}
+
+/* ---------- export ---------- */
+async function doExport(){
+  const m = document.createElement("div");
+  m.className = "modal";
+  m.innerHTML = '<div class="box"><h2>Making your slides…</h2><p class="muted">This takes a few seconds per slide.</p><div class="spin"></div></div>';
+  document.body.appendChild(m);
+  clearTimeout(saveTimer); await save();
+  try{
+    const r = await fetch("/api/export", {method:"POST", body:JSON.stringify({format:$("#fmt").value})});
+    const j = await r.json();
+    if (!j.ok) throw new Error(j.error || "Something went wrong");
+    m.querySelector(".box").innerHTML = "<h2>Your carousel is ready</h2><p class=\"muted\">" + j.slides.length +
+      " slides at Instagram size (1080 by 1350), plus the caption and a contact sheet of every slide.</p>" +
+      '<img src="' + j.sheet + "?t=" + Date.now() + '">' +
+      '<div class="btnrow"><a href="' + j.zip + '" download><button class="main">Download everything (.zip)</button></a><button id="reveal">Show the folder</button>' +
+      '<button id="copycap">Copy caption</button><button id="close">Keep editing</button></div><p class="muted">Saved in ' + j.folder.replace(/</g, "") + "</p>";
+    m.querySelector("#close").onclick = () => m.remove();
+    m.querySelector("#reveal").onclick = () => fetch("/api/reveal", {method:"POST"});
+    m.querySelector("#copycap").onclick = async () => { try{ await navigator.clipboard.writeText(S.plan.caption || ""); toast("Caption copied"); }catch(e){} };
+  }catch(e){
+    m.querySelector(".box").innerHTML = "<h2>That didn't finish</h2><p>" + String(e.message).replace(/</g, "") + '</p><div class="btnrow"><button id="close">Close</button></div>';
+    m.querySelector("#close").onclick = () => m.remove();
+  }
+}
+
+/* ---------- start ---------- */
+async function start(){
+  const r = await fetch("/api/state");
+  const j = await r.json();
+  Object.assign(S, {plan:j.plan, themes:j.themes, photos:j.photos, ctx:j.ctx, fonts:j.fonts});
+  S.plan.slides = S.plan.slides || [];
+  if (!S.plan.slides.length) S.plan.slides.push({role:"cover"});
+  $("#title").value = S.plan.title || "";
+  $("#title").oninput = e => { S.plan.title = e.target.value; clearTimeout(saveTimer); saveTimer = setTimeout(save, 600); };
+  document.querySelectorAll("#tabs button").forEach(b => b.onclick = () => { S.tab = b.dataset.tab; drawPanel(); });
+  $("#prev").onclick = () => { S.cur = Math.max(0, S.cur - 1); drawAll(); };
+  $("#next").onclick = () => { S.cur = Math.min(S.plan.slides.length - 1, S.cur + 1); drawAll(); };
+  $("#dup").onclick = () => { snapshot(); S.plan.slides.splice(S.cur + 1, 0, JSON.parse(JSON.stringify(slide()))); S.cur++; commit({panel:true}); };
+  $("#del").onclick = () => {
+    if (S.plan.slides.length < 2) return toast("A carousel needs at least one slide");
+    snapshot(); S.plan.slides.splice(S.cur, 1); S.cur = Math.min(S.cur, S.plan.slides.length - 1); commit({panel:true});
+    toast("Slide deleted. Undo brings it back.");
+  };
+  $("#undo").onclick = undo;
+  $("#export").onclick = doExport;
+  document.addEventListener("keydown", e => {
+    const typing = /INPUT|TEXTAREA|SELECT/.test(document.activeElement.tagName) || document.activeElement.isContentEditable;
+    if ((e.metaKey || e.ctrlKey) && e.key === "z" && !typing){ e.preventDefault(); undo(); }
+    if (!typing && e.key === "ArrowRight"){ S.cur = Math.min(S.plan.slides.length - 1, S.cur + 1); drawAll(); }
+    if (!typing && e.key === "ArrowLeft"){ S.cur = Math.max(0, S.cur - 1); drawAll(); }
+  });
+  window.addEventListener("resize", () => drawStage());
+  await document.fonts.ready;
+  drawAll();
+  // fonts load lazily: redraw once they arrive so text fits correctly
+  document.fonts.onloadingdone = () => { if (document.activeElement && document.activeElement.isContentEditable) return; drawStage(); drawStrip(); if (S.tab === "layout") drawPanel(); };
+}
+function undo(){
+  if (!history.length) return toast("Nothing to undo");
+  S.plan = JSON.parse(history.pop());
+  S.cur = Math.min(S.cur, S.plan.slides.length - 1);
+  commit({panel:true});
+}
+start();
+</script>
+</body>
+</html>

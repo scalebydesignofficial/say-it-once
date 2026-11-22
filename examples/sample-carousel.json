@@ -1,0 +1,13 @@
+{
+  "title": "Sample: starting before you feel ready",
+  "slides": [
+    {"type": "cover", "kicker": "Read this first", "headline": "You do not need to feel **ready** to start", "sub": "Swipe for what to do instead"},
+    {"type": "point", "kicker": "01", "headline": "Ready is a feeling, and feelings show up late", "body": "Most people wait for confidence before they begin. Confidence usually shows up after the first few messy tries."},
+    {"type": "point", "kicker": "02", "headline": "Pick the smallest version", "body": "Not the whole plan. One post, one page, one call. Small enough that you cannot talk yourself out of it."},
+    {"type": "list", "kicker": "This week", "headline": "Three small starts", "items": ["Write the first sentence", "Tell one person what you are building", "Set a 20 minute timer and stop when it rings"]},
+    {"type": "quote", "text": "A rough start beats a perfect plan that never leaves your notes app."},
+    {"type": "point", "kicker": "03", "headline": "Let it be a draft", "body": "Drafts are allowed to be bad. You are collecting proof that you can move."},
+    {"type": "close", "headline": "Start the small version today", "body": "Tell me which one you picked.", "cta": "Comment START"}
+  ],
+  "caption": "Waiting to feel ready is one of the quietest ways to stay stuck.\n\nPick the smallest version of the thing and do it today. Rough is fine.\n\nTell me in the comments which small start you picked.\n\nComment START and I will cheer you on."
+}

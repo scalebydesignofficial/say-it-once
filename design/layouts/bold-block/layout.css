@@ -1,0 +1,20 @@
+.L{--fs-cover:11.4;--fs-h:8;--fs-b:4.4;--fs-q:8;--fs-li:4.6;--pad:7}
+.L .headline,.L .qtext{font-weight:800;text-transform:uppercase;letter-spacing:-.02em;line-height:1.0}
+.L .top,.L .bottom{font-weight:700;font-size:calc(var(--u) * 2.5);letter-spacing:.1em;text-transform:uppercase}
+.L .deco::before{content:"";position:absolute;left:0;top:0;right:0;height:calc(var(--u) * 2.6);background:var(--accent)}
+.L .kicker{display:inline-block;align-self:flex-start;font-weight:800;letter-spacing:.14em;text-transform:uppercase;padding:calc(var(--u) * .9) calc(var(--u) * 2);background:var(--ink);color:var(--bg)}
+.L strong.hl{background:linear-gradient(to bottom,transparent 14%,var(--accent) 14%,var(--accent) 88%,transparent 88%);color:var(--on-accent);padding:0 .14em;-webkit-box-decoration-break:clone;box-decoration-break:clone}
+.L.slide--cover,.L.slide--close{background:var(--accent);color:var(--on-accent)}
+.L.slide--cover .deco::before,.L.slide--close .deco::before{background:var(--accent2)}
+.L.slide--cover .kicker,.L.slide--close .kicker{background:var(--on-accent);color:var(--accent)}
+.L.slide--cover strong.hl,.L.slide--close strong.hl{background:linear-gradient(to bottom,transparent 14%,var(--on-accent) 14%,var(--on-accent) 88%,transparent 88%);color:var(--accent)}
+.L.slide--cover .content{justify-content:flex-end}
+.L.slide--cover .sub{font-weight:500;opacity:.92}
+.L.slide--point .body{font-weight:500}
+.L.slide--list .items li{align-items:center;font-weight:600}
+.L.slide--list .n{display:inline-flex;align-items:center;justify-content:center;width:2.1em;height:2.1em;border-radius:50%;background:var(--accent);color:var(--on-accent);font-weight:800;font-size:.9em}
+.L.slide--quote{background:var(--accent2);color:var(--on-accent2)}
+.L.slide--quote .deco::before{background:var(--accent)}
+.L.slide--quote strong.hl{background:linear-gradient(to bottom,transparent 14%,var(--on-accent2) 14%,var(--on-accent2) 88%,transparent 88%);color:var(--accent2)}
+.L.slide--quote .attr{font-weight:800;letter-spacing:.12em;text-transform:uppercase}
+.L.slide--close .cta{background:var(--on-accent);color:var(--accent);font-weight:800;letter-spacing:.08em;text-transform:uppercase;padding:calc(var(--u) * 2.2) calc(var(--u) * 4)}

@@ -1,0 +1,19 @@
+.L{--fs-cover:13;--fs-h:9.4;--fs-b:4.2;--fs-q:9;--fs-li:4.8;--pad:7.5;--ruled:calc(var(--u) * 5.4)}
+.L .deco{background-image:repeating-linear-gradient(to bottom,transparent 0,transparent calc(var(--ruled) - 2px),color-mix(in srgb,var(--accent2) 70%,transparent) calc(var(--ruled) - 2px),color-mix(in srgb,var(--accent2) 70%,transparent) var(--ruled))}
+.L .deco::before{content:"";position:absolute;left:calc(var(--u) * 11);top:0;bottom:0;width:calc(var(--u) * .28);background:color-mix(in srgb,var(--accent) 55%,transparent)}
+.L .inner{padding-left:calc(var(--u) * 15)}
+.L .top,.L .bottom{font-size:calc(var(--u) * 2.5);color:var(--muted);font-weight:600}
+.L .headline{font-family:var(--font-accent);font-weight:700;line-height:1.02;letter-spacing:0}
+.L .kicker{font-family:var(--font-accent);font-weight:700;color:var(--accent);font-size:calc(var(--u) * 4.2 * var(--fit))}
+.L strong.hl{background:linear-gradient(transparent 52%,color-mix(in srgb,var(--accent2) 85%,transparent) 52%);padding:0 .08em}
+.L.slide--cover .content{justify-content:flex-end}
+.L.slide--cover .sub{color:var(--muted)}
+.L.slide--cover .deco::after{content:"";position:absolute;top:calc(var(--u) * 3.2);left:calc(var(--u) * 40);width:calc(var(--u) * 22);height:calc(var(--u) * 6.4);background:color-mix(in srgb,var(--accent2) 80%,transparent);transform:rotate(-3deg)}
+.L.slide--point .body{line-height:calc(var(--ruled) * var(--fit))}
+.L.slide--point.solo .body{font-family:var(--font-accent);font-weight:700;line-height:1.1}
+.L.slide--list .items li{align-items:center}
+.L.slide--list .n{display:inline-flex;align-items:center;justify-content:center;width:1.9em;height:1.9em;border:calc(var(--u) * .3) solid var(--accent);border-radius:50%;color:var(--accent);font-family:var(--font-accent);font-weight:700;font-size:1.05em}
+.L.slide--quote .qtext{font-family:var(--font-accent);font-weight:700;line-height:1.08}
+.L.slide--quote .attr{color:var(--muted);font-weight:600}
+.L.slide--close{background:var(--bg)}
+.L.slide--close .cta{font-family:var(--font-accent);font-weight:700;color:var(--accent);border:calc(var(--u) * .35) solid var(--accent);border-radius:calc(var(--u) * 8) calc(var(--u) * 6) calc(var(--u) * 8) calc(var(--u) * 6);padding:calc(var(--u) * 1.4) calc(var(--u) * 4);font-size:calc(var(--u) * 4.4 * var(--fit))}

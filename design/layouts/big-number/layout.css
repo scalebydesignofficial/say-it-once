@@ -1,0 +1,23 @@
+.L{--fs-cover:11;--fs-h:7.6;--fs-b:4.2;--fs-q:7.6;--fs-li:4.5;--fs-stat:38;--pad:7.5}
+.L .top{padding-bottom:calc(var(--u) * 2);border-bottom:calc(var(--u) * .7) solid var(--ink)}
+.L .bottom{padding-top:calc(var(--u) * 2);border-top:calc(var(--u) * .7) solid var(--ink)}
+.L .top,.L .bottom{font-weight:800;letter-spacing:.14em;text-transform:uppercase;font-size:calc(var(--u) * 2.3)}
+.L .headline{font-weight:800;letter-spacing:-.03em;line-height:1.02}
+.L .kicker{font-weight:800;letter-spacing:.18em;text-transform:uppercase;color:var(--accent)}
+.L .kicker.num{font-family:var(--font-head);font-weight:800;letter-spacing:-.04em;font-size:calc(var(--u) * 26 * var(--fit));line-height:.82;color:var(--accent);text-transform:none}
+.L strong.hl{color:var(--accent)}
+.L.slide--cover .content{justify-content:flex-end}
+.L.slide--cover .headline{text-transform:uppercase}
+.L.slide--cover .sub{font-weight:600;color:var(--muted)}
+.L.slide--point .stack{gap:calc(var(--u) * 2.2)}
+.L.slide--list .items li{align-items:center;border-top:calc(var(--u) * .4) solid var(--ink);padding-top:calc(var(--u) * 2.2);font-weight:600}
+.L.slide--list .n{font-weight:800;color:var(--accent);font-size:2.3em;min-width:1.1em;line-height:.9}
+.L.slide--quote .qtext{font-weight:800;line-height:1.08;text-transform:uppercase}
+.L.slide--quote .qtext::before{content:"\201C";display:block;font-size:3.4em;line-height:.6;color:var(--accent)}
+.L.slide--stat .stat-num{font-weight:800}
+.L.slide--checklist .box{background:var(--accent);color:var(--on-accent);border-color:var(--accent)}
+.L.slide--versus .vs-card{border-radius:0}
+.L.slide--close{background:var(--accent);color:var(--on-accent)}
+.L.slide--close .top{border-color:var(--on-accent)}.L.slide--close .bottom{border-color:var(--on-accent)}
+.L.slide--close strong.hl{color:var(--on-accent);text-decoration:underline;text-decoration-thickness:.08em;text-underline-offset:.1em}
+.L.slide--close .cta{background:var(--on-accent);color:var(--accent);font-weight:800;text-transform:uppercase;letter-spacing:.08em;padding:calc(var(--u) * 2.2) calc(var(--u) * 4)}

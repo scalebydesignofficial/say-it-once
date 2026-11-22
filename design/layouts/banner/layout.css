@@ -1,0 +1,22 @@
+.L{--fs-cover:10.6;--fs-h:7.2;--fs-b:4.2;--fs-q:7.2;--fs-li:4.4;--pad:7.5}
+.L .top,.L .bottom{font-weight:700;font-size:calc(var(--u) * 2.4);letter-spacing:.12em;text-transform:uppercase;color:var(--muted)}
+.L .headline{font-weight:800;letter-spacing:-.02em}
+.L .kicker{display:inline-block;align-self:flex-start;font-weight:800;letter-spacing:.16em;text-transform:uppercase;color:var(--accent);border-bottom:calc(var(--u) * .5) solid var(--accent);padding-bottom:calc(var(--u) * .5)}
+.L.slide--point .headline,.L.slide--list .headline,.L.slide--checklist .headline,.L.slide--versus .headline{background:var(--accent);color:var(--on-accent);margin:0 calc(var(--u) * -7.5);padding:calc(var(--u) * 3.6) calc(var(--u) * 7.5) calc(var(--u) * 5.2);clip-path:polygon(0 0,100% 0,100% 100%,0 calc(100% - var(--u) * 2.4))}
+.L.slide--point.solo .body{color:var(--ink)}
+.L strong.hl{color:var(--accent);font-style:italic}
+.L .headline strong.hl{color:var(--accent2)}
+.L.slide--cover{background:var(--accent);color:var(--on-accent)}
+.L.slide--cover .top,.L.slide--cover .bottom,.L.slide--close .top,.L.slide--close .bottom{color:var(--on-accent);opacity:.8}
+.L.slide--cover .kicker,.L.slide--close .kicker{color:var(--on-accent);border-color:var(--on-accent)}
+.L.slide--cover strong.hl,.L.slide--close strong.hl{color:var(--on-accent);text-decoration:underline wavy;text-underline-offset:.16em}
+.L.slide--cover .content{justify-content:flex-end}
+.L.slide--cover .deco::before{content:"";position:absolute;left:0;right:0;bottom:0;height:34%;background:color-mix(in srgb,var(--on-accent) 12%,transparent);clip-path:polygon(0 38%,100% 0,100% 100%,0 100%)}
+.L.slide--list .n{color:var(--accent);font-weight:800;font-size:1.25em}
+.L.slide--list .items li{align-items:center;font-weight:600}
+.L.slide--quote{background:var(--accent2);color:var(--on-accent2)}
+.L.slide--quote .qtext{font-weight:800;line-height:1.1}
+.L.slide--quote .qtext::before{content:"\201C";display:block;font-size:3em;line-height:.6;color:var(--accent)}
+.L.slide--close{background:var(--accent);color:var(--on-accent)}
+.L.slide--close .cta{background:var(--on-accent);color:var(--accent);font-weight:800;letter-spacing:.08em;text-transform:uppercase;padding:calc(var(--u) * 2.2) calc(var(--u) * 4);clip-path:polygon(0 0,100% 0,96% 100%,0 100%)}
+.L.slide--versus .vs-b{background:var(--ink);color:var(--bg)}
