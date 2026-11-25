@@ -34,6 +34,14 @@ Your work saves as you go. Close the tab any time and say "open my carousel edit
 
 Every layout works in every theme, with your fonts and colors.
 
+## Make it move
+
+Say **"animate this carousel."** You get one swipe-through video for a Reel or Story, plus a short clip for each slide. Text rises in line by line, photos drift slowly, and slides swipe into each other. This needs the free tool ffmpeg (Claude tells you if it is missing).
+
+## No photos?
+
+Say **"make me photos."** Claude writes a short description for each picture and, with your own OpenAI or Google Gemini key, makes them for you. The service charges a few cents per picture, and Claude asks before spending anything.
+
 ## Good to know
 
 - You need Google Chrome (or Edge, Brave, Chromium) installed. The editor opens in whichever browser you use.

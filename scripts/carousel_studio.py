@@ -7,6 +7,8 @@ Usage:
     python3 scripts/carousel_studio.py build <folder> [--format png|jpg]
     python3 scripts/carousel_studio.py sheet <folder>
     python3 scripts/carousel_studio.py edit <folder> [--no-open] [--port N]
+    python3 scripts/carousel_studio.py pack <batch-folder> [--no-pdf] [--force]
+    python3 scripts/carousel_studio.py animate <folder-or-batch> [--seconds 4] [--size portrait|story] [--audio FILE]
     python3 scripts/carousel_studio.py themes
 
 A carousel folder holds plan.json (the slides), photos/ (its pictures), and after a build:
@@ -33,6 +35,11 @@ from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
 
 sys.path.insert(0, str(pathlib.Path(__file__).resolve().parent))
 import engine_lib as E  # noqa: E402
+for _s in (sys.stdout, sys.stderr):  # Windows consoles can choke on curly quotes and emoji; never crash on printing
+    try:
+        _s.reconfigure(encoding="utf-8", errors="replace")
+    except Exception:  # noqa: BLE001
+        pass
 
 STUDIO = E.DESIGN / "carousel-studio"
 FONTS = E.DESIGN / "fonts"
@@ -67,16 +74,38 @@ def _mix(a, b, t):
         return None
 
 
+def _luma(h):
+    try:
+        r, g, b = [int(h.lstrip("#")[i:i + 2], 16) / 255 for i in (0, 2, 4)]
+        return 0.2126 * r + 0.7152 * g + 0.0722 * b
+    except (ValueError, AttributeError, IndexError):
+        return 1.0
+
+
+def _paper(bg):
+    """Card color: a touch lighter than a light background, a touch lighter than a dark one."""
+    bg = bg or "#FFFFFF"
+    if _luma(bg) < 0.2:
+        return _mix(bg, "#FFFFFF", 0.9)
+    return _mix(bg, "#FFFFFF", 0.45)
+
+
 def brand_theme():
     b = E.load_brand()
     c, f = b.get("colors", {}), b.get("fonts", {})
     head = f.get("heading") or "Playfair Display"
     weights = _font_weights().get(head, [700])
+    lc = b.get("layout_colors") or {}  # per-layout accents: {"note-card": {"tape": "#131313"}, ...}
+    extra = {}
+    for key, layout, slot in (("tape", "note-card", "tape"), ("bookmark", "cta-save", "bookmark"), ("avatar", "quote-post", "avatar"), ("photo_hl", "photo-full", "highlight")):
+        val = (lc.get(layout) or {}).get(slot)
+        if val:
+            extra[key] = val
     return {
         "id": "brand", "name": "My brand",
         "colors": {"bg": c.get("bg"), "ink": c.get("ink"), "accent": c.get("accent"), "accent2": c.get("accent2"),
                    "muted": c.get("muted"), "dark": c.get("bg_dark") or c.get("ink"),
-                   "paper": _mix(c.get("bg") or "#FFFFFF", "#FFFFFF", 0.45)},
+                   "paper": _paper(c.get("bg")), **extra},
         "fonts": {"head": head, "body": f.get("body") or "Poppins", "script": f.get("accent") or "Caveat"},
         "head_weight": max(w for w in weights if w <= 700) if any(w <= 700 for w in weights) else weights[0],
         "head_case": "none", "head_track": "-0.01em", "kicker": "script", "quote_italic": True, "radius": 30,
@@ -119,6 +148,8 @@ def from_pack_carousel(data):
     for s in data.get("slides", []):
         role = TYPE_TO_ROLE.get(s.get("type"), "point")
         n = {"role": role}
+        if s.get("type") == "checklist":
+            n["layout"] = "checklist"
         for k in ("kicker", "headline", "body", "items", "number", "cta"):
             if s.get(k):
                 n[k] = s[k]
@@ -257,18 +288,24 @@ class Shooter:
 
 # ------------------------------------------------------------------- build ----
 
-def build(folder, fmt="png", quiet=False):
-    folder = pathlib.Path(folder).resolve()
-    plan = load_plan(folder)
-    slides = plan.get("slides") or []
-    if not slides:
-        sys.exit("This plan has no slides yet.")
-    if not E.find_chrome():
-        sys.exit("I need Google Chrome (or Edge, Brave, Chromium) to make the images. Install Chrome, then try again.")
-    theme = resolve_theme(plan)
-    ctx = ctx_base(plan)
-    ctx["theme"] = theme
-    ctx["n"] = len(slides)
+def out_layout(folder, plan):
+    """Where the finished images go, and what they are called.
+    Normal carousel: <folder>/slides/slide-NN. A pack carousel ("flat") keeps slide-NN next to its words.
+    A set of quote graphics ("kind": "quotes") is quote-NN next to its words."""
+    folder = pathlib.Path(folder)
+    if plan.get("kind") == "quotes":
+        return folder, "quote"
+    if plan.get("flat"):
+        return folder, "slide"
+    return folder / "slides", "slide"
+
+
+def slide_images(folder, plan):
+    d, prefix = out_layout(folder, plan)
+    return sorted(d.glob(f"{prefix}-[0-9][0-9].*")) if d.exists() else []
+
+
+def photo_map(folder, slides, quiet=False):
     photos = {}
     for s in slides:
         for key in ("photo", "photo2"):
@@ -279,9 +316,14 @@ def build(folder, fmt="png", quiet=False):
                 photos[src] = found.resolve().as_uri()
             elif src and not quiet:
                 print(f"  note: photo '{src}' not found, that slide shows an empty photo spot")
+    return photos
+
+
+def write_page(folder, plan, name, photos, ctx, theme, tail_js="", mode="slide"):
+    """Write the page that draws slides. mode 'slide' exposes show(i); animation pages add seek(t) via tail_js."""
     work = folder / "_studio"
     work.mkdir(exist_ok=True)
-    page = work / "render.html"
+    page = work / name
     page.write_text(page_head(file_asset_url, E.custom_fonts_css()) + f"""<body><div id="stage"></div>
 <script>{READY_JS}
 const PLAN={json.dumps(plan, ensure_ascii=False)};
@@ -293,11 +335,49 @@ window.show=async function(i){{
   stage.innerHTML=CarouselStudio.render(PLAN.slides[i],c,PLAN);
   await settle(stage,LOADS); return CarouselStudio.layoutFor(PLAN.slides[i],PLAN);
 }};
-document.documentElement.setAttribute('data-ready','1');
+{tail_js or "document.documentElement.setAttribute('data-ready','1');"}
 </script></body></html>""", encoding="utf-8")
-    out_dir = folder / "slides"
+    return page
+
+
+def make_pdf(shooter, folder, plan, photos, ctx, theme, out):
+    """All slides in one PDF, one slide per page (also the file to upload as a LinkedIn document post)."""
+    page = write_page(folder, plan, "pdf.html", photos, ctx, theme, tail_js=r"""
+(async function(){
+  const wrap=document.createElement('div'); document.body.appendChild(wrap); stage.remove();
+  const st=document.createElement('style'); st.textContent='@page{size:1080px 1350px;margin:0}html,body{margin:0}.pg{width:1080px;height:1350px;overflow:hidden;page-break-after:always;break-after:page}';
+  document.head.appendChild(st);
+  for(let i=0;i<PLAN.slides.length;i++){
+    const d=document.createElement('div'); d.className='pg';
+    const c=Object.assign({},CTX,{i:i,photoUrl:n=>PHOTOS[n]||n});
+    d.innerHTML=CarouselStudio.render(PLAN.slides[i],c,PLAN); wrap.appendChild(d);
+  }
+  await settle(wrap,LOADS);
+  document.documentElement.setAttribute('data-ready','1');
+})();""")
+    shooter.open(page)
+    r = shooter.b.call("Page.printToPDF", preferCSSPageSize=True, printBackground=True)
+    pathlib.Path(out).write_bytes(base64.b64decode(r["data"]))
+    return out
+
+
+def build(folder, fmt="png", quiet=False, pdf=None):
+    folder = pathlib.Path(folder).resolve()
+    plan = load_plan(folder)
+    slides = plan.get("slides") or []
+    if not slides:
+        sys.exit("This plan has no slides yet.")
+    if not E.find_chrome():
+        sys.exit("I need Google Chrome (or Edge, Brave, Chromium) to make the images. Install Chrome, then try again.")
+    theme = resolve_theme(plan)
+    ctx = ctx_base(plan)
+    ctx["theme"] = theme
+    ctx["n"] = len(slides)
+    photos = photo_map(folder, slides, quiet)
+    page = write_page(folder, plan, "render.html", photos, ctx, theme)
+    out_dir, prefix = out_layout(folder, plan)
     if out_dir.exists():
-        for old in out_dir.glob("slide-*.*"):
+        for old in out_dir.glob(f"{prefix}-[0-9][0-9].*"):
             old.unlink()
     out_dir.mkdir(exist_ok=True)
     ext = "jpg" if fmt in ("jpg", "jpeg") else "png"
@@ -307,18 +387,23 @@ document.documentElement.setAttribute('data-ready','1');
         shooter.open(page)
         for i in range(len(slides)):
             layout = shooter.eval(f"show({i})")
-            out = out_dir / f"slide-{i + 1:02d}.{ext}"
+            out = out_dir / f"{prefix}-{i + 1:02d}.{ext}"
             shooter.shot(out, W, H, ext)
             made.append((out, layout))
             if not quiet:
-                print(f"  slide {i + 1}: {layout}")
+                print(f"  {prefix} {i + 1}: {layout}")
         sheet = contact_sheet(folder, plan, [m[0] for m in made], [m[1] for m in made], shooter)
+        want_pdf = plan.get("flat") if pdf is None else pdf
+        if want_pdf and plan.get("kind") != "quotes":
+            shooter.size(W, H)
+            make_pdf(shooter, folder, plan, photos, ctx, theme, folder / "carousel.pdf")
     finally:
         shooter.close()
     cap = (plan.get("caption") or "").strip()
-    (folder / "caption.txt").write_text(cap + "\n" if cap else "", encoding="utf-8")
+    if plan.get("kind") != "quotes":
+        (folder / "caption.txt").write_text(cap + "\n" if cap else "", encoding="utf-8")
     if not quiet:
-        print(f"Made {len(made)} slides in {out_dir}")
+        print(f"Made {len(made)} images in {out_dir}")
         print(f"Contact sheet: {sheet}")
     return [m[0] for m in made], sheet
 
@@ -571,6 +656,7 @@ class EditorHandler(BaseHTTPRequestHandler):
             if not EditorHandler.backed_up and (f / "plan.json").exists():
                 shutil.copy2(f / "plan.json", f / "plan.before-edit.json")
                 EditorHandler.backed_up = True
+            plan["edited"] = True  # the pack builder will not overwrite a plan someone edited by hand
             save_plan(f, plan)
             return self._send(200, {"ok": True})
         if u.path == "/api/upload":
@@ -604,7 +690,7 @@ class EditorHandler(BaseHTTPRequestHandler):
             return self._send(200, {"ok": True, "slides": [rel(i) for i in images], "sheet": rel(sheet), "zip": rel(zp),
                                     "folder": str(f)})
         if u.path == "/api/reveal":
-            target = f / "slides" if (f / "slides").exists() else f
+            target = f / "slides" if (f / "slides").exists() and not load_plan(f).get("flat") else f
             opener = {"darwin": ["open"], "win32": ["explorer"]}.get(sys.platform, ["xdg-open"])
             try:
                 subprocess.Popen(opener + [str(target)])
@@ -643,6 +729,277 @@ def edit(folder, open_browser=True, port=None):
         pass
 
 
+# ------------------------------------------------------- pack (run it) ----
+
+# Each carousel in a pack gets one of these styles in turn, so a batch has variety but every carousel is consistent.
+# (layout without a photo, layout with a photo) for covers, quotes and closers; points rotate through a pair.
+PACK_STYLES = [
+    {"look": "editorial", "cover": ("big-type", "photo-full"), "points": ["editorial", "note-card"], "list": "list-numbered",
+     "quote": ("quote-classic", "quote-photo"), "stat": "stat-giant", "compare": "myth-truth", "close": ("cta-comment", "cta-photo")},
+    {"look": "bold", "cover": ("cover-sticker", "cover-magazine"), "points": ["big-type", "color-block"], "list": "checklist",
+     "quote": ("quote-post", "quote-photo"), "stat": "stat-ring", "compare": "side-by-side", "close": ("cta-save", "cta-photo")},
+    {"look": "soft", "cover": ("color-block", "photo-arch"), "points": ["note-card", "color-block"], "list": "steps-timeline",
+     "quote": ("quote-verse", "quote-photo"), "stat": "stat-giant", "compare": "myth-truth", "close": ("cta-comment", "cta-photo")},
+]
+QUOTE_LAYOUTS = ["quote-classic", "quote-post", "quote-verse", "note-card"]
+POINT_PHOTO_LAYOUT = {"point": "photo-window", "list": "list-photo"}
+# Quote layouts that print the name or Scripture reference under the quote. A quote with one must use these.
+SHOWS_ATTRIBUTION = {"quote-classic", "quote-verse", "quote-photo"}
+
+
+def brand_flags():
+    b = E.load_brand()
+    return {"show_handle": bool(b.get("show_handle", True)), "show_numbers": bool(b.get("show_page_numbers", True)),
+            "show_swipe": bool(b.get("show_swipe", True))}
+
+
+def _brand_photo_names():
+    cfg = E.load_brand().get("photos") or {}
+    if not cfg.get("auto", True):
+        return [], []
+    names = [p.name for p in sorted((E.BRAND_DIR / "photos").glob("*")) if p.suffix.lower() in PHOTO_EXT] if (E.BRAND_DIR / "photos").exists() else []
+    return names, (cfg.get("types") or ["cover", "close", "quote"])
+
+
+def _own_photo(folder, slide_no):
+    """A picture made for exactly this slide (photos/slide-NN.*), for example by make_images.py."""
+    d = pathlib.Path(folder) / "photos"
+    if d.exists():
+        for ext in PHOTO_EXT:
+            f = d / f"slide-{slide_no:02d}{ext}"
+            if f.exists():
+                return f.name
+    return None
+
+
+def pack_carousel_plan(folder, idx):
+    folder = pathlib.Path(folder)
+    data = E.load_json(folder / "carousel.json", {})
+    plan = from_pack_carousel(data)
+    style = PACK_STYLES[idx % len(PACK_STYLES)]
+    plan["look"] = style["look"]
+    plan.update(brand_flags())
+    plan["flat"] = True
+    cap = folder / "caption.md"
+    if cap.exists():
+        plan["caption"] = cap.read_text(encoding="utf-8").strip()
+    brand_pics, brand_types = _brand_photo_names()
+    bp, point_i = 0, 0
+    for n, s in enumerate(plan["slides"], 1):
+        role = s["role"]
+        own = _own_photo(folder, n)
+        pic, y = own, 30
+        if not pic and brand_pics and role in ("cover", "close", "quote") and role in brand_types and s.get("photo") is None:
+            pic = brand_pics[bp % len(brand_pics)]
+            bp += 1
+        if s.get("photo"):
+            pic = s["photo"]["src"]
+        elif pic:
+            s["photo"] = {"src": pic, "x": 50, "y": y, "zoom": 1}
+        if s.get("layout"):
+            continue
+        if role == "cover":
+            s["layout"] = style["cover"][1 if pic else 0]
+        elif role == "close":
+            s["layout"] = style["close"][1 if pic else 0]
+        elif role == "quote":
+            s["layout"] = style["quote"][1 if pic else 0]
+            if s.get("sub") and s["layout"] not in SHOWS_ATTRIBUTION:
+                s["layout"] = "quote-verse" if style["look"] == "soft" else "quote-classic"
+        elif role == "point":
+            s["layout"] = POINT_PHOTO_LAYOUT["point"] if pic else style["points"][point_i % len(style["points"])]
+            point_i += 1
+        elif role == "list":
+            s["layout"] = POINT_PHOTO_LAYOUT["list"] if pic else style["list"]
+        elif role == "stat":
+            s["layout"] = style["stat"]
+        elif role == "compare":
+            s["layout"] = style["compare"]
+    return plan
+
+
+def pack_quotes_plan(folder):
+    folder = pathlib.Path(folder)
+    data = E.load_json(folder / "quotes.json", {})
+    brand_pics, brand_types = _brand_photo_names()
+    slides, bp = [], 0
+    for i, q in enumerate(data.get("quotes") or []):
+        q = {"text": q} if isinstance(q, str) else dict(q)
+        s = {"role": "quote", "headline": q.get("text", ""), "layout": QUOTE_LAYOUTS[i % len(QUOTE_LAYOUTS)]}
+        if q.get("ref"):
+            s["sub"] = q["ref"]
+            s["layout"] = ["quote-classic", "quote-verse"][i % 2]
+        if brand_pics and "quote" in brand_types and i % 3 == 1:
+            s["photo"] = {"src": brand_pics[bp % len(brand_pics)], "x": 50, "y": 30, "zoom": 1}
+            s["layout"] = "quote-photo"
+            bp += 1
+        slides.append(s)
+    plan = {"title": data.get("title") or folder.name, "look": "editorial", "theme": "brand", "caption": "", "kind": "quotes", "slides": slides}
+    plan.update(brand_flags())
+    plan["show_swipe"] = False
+    plan["show_numbers"] = False
+    return plan
+
+
+def find_pack_folders(target):
+    target = pathlib.Path(target)
+    cars, quotes = [], []
+    for p in sorted(target.rglob("carousel.json")):
+        if not any(part.startswith("_") for part in p.relative_to(target).parts):
+            cars.append(p.parent)
+    for p in sorted(target.rglob("quotes.json")):
+        if not any(part.startswith("_") for part in p.relative_to(target).parts):
+            quotes.append(p.parent)
+    return cars, quotes
+
+
+def _stale(folder, source_name):
+    """Is the words file newer than the plan built from it (and the plan not hand-edited)?"""
+    pj, src = folder / "plan.json", folder / source_name
+    if not pj.exists():
+        return True
+    plan = E.load_json(pj, {})
+    if plan.get("edited"):
+        return False
+    newest = src.stat().st_mtime if src.exists() else 0
+    photos = folder / "photos"
+    if photos.exists():
+        for f in photos.iterdir():
+            newest = max(newest, f.stat().st_mtime)
+    cap = folder / "caption.md"
+    if cap.exists():
+        newest = max(newest, cap.stat().st_mtime)
+    return newest > pj.stat().st_mtime
+
+
+def pack(target, pdf=True, force=False, only_plans=False):
+    """Build every carousel and quote graphic in a pack folder with the Carousel Studio layouts."""
+    target = pathlib.Path(target).resolve()
+    cars, quotes = find_pack_folders(target)
+    if not cars and not quotes:
+        sys.exit(f"No carousel.json or quotes.json found in {target}")
+    total = 0
+    for i, folder in enumerate(cars):
+        if force or _stale(folder, "carousel.json"):
+            save_plan(folder, pack_carousel_plan(folder, i))
+        elif E.load_json(folder / "plan.json", {}).get("edited") and not only_plans:
+            print(f"  {folder.name}: kept your edits from the editor")
+        if only_plans:
+            continue
+        try:
+            imgs, _ = build(folder, quiet=True, pdf=pdf)
+            total += len(imgs)
+            print(f"ok  {folder.name}: {len(imgs)} slides" + (" + PDF" if pdf else ""))
+        except SystemExit as e:
+            print(f"FAILED {folder.name}: {e}")
+        except Exception as e:  # noqa: BLE001
+            print(f"FAILED {folder.name}: {e}")
+    for folder in quotes:
+        if force or _stale(folder, "quotes.json"):
+            save_plan(folder, pack_quotes_plan(folder))
+        if only_plans:
+            continue
+        try:
+            imgs, _ = build(folder, quiet=True)
+            total += len(imgs)
+            print(f"ok  {folder.parent.name}/{folder.name}: {len(imgs)} quote graphics")
+        except Exception as e:  # noqa: BLE001
+            print(f"FAILED {folder.name}: {e}")
+    print(f"Done. {total} image(s) made.")
+
+
+# --------------------------------------------------------------- animation ----
+
+def _anim_js(index, total_s, h):
+    """Page script: draw slide `index`, then expose seek(t) so a video frame can be taken at any moment."""
+    return r"""
+(async function(){
+  const TOTAL=%(total)s, H=%(h)s;
+  await show(%(i)s);
+  const root=stage.querySelector('.sio');
+  const bg=getComputedStyle(root).backgroundColor;
+  if(H>1350){ document.body.style.background=bg; stage.style.cssText='width:1080px;height:'+H+'px;display:flex;align-items:center;justify-content:center'; }
+  const stop=e=>e===root||e.classList.contains('fitbox')||e.classList.contains('fi');
+  function unitOf(f){ let u=f; while(u.parentElement && !stop(u.parentElement) && u.parentElement.querySelectorAll('[data-field]').length===1) u=u.parentElement; return u; }
+  const units=[]; root.querySelectorAll('[data-field]').forEach(f=>{ const u=unitOf(f); if(!units.includes(u)) units.push(u); });
+  const decor=[...root.children].filter(e=>!e.matches('.ph,.scrim,.chr,.swipe,.fitbox')).concat([...root.querySelectorAll('.rule')]);
+  const imgs=[...root.querySelectorAll('.ph img')];
+  const clamp=x=>Math.max(0,Math.min(1,x));
+  window.seek=function(t){
+    decor.forEach(e=>{ e.style.opacity=clamp(t/0.5); });
+    units.forEach((u,i)=>{ const p=clamp((t-(0.25+i*0.2))/0.6), e=1-Math.pow(1-p,3); u.style.opacity=e; u.style.translate='0 '+(36*(1-e)).toFixed(1)+'px'; });
+    imgs.forEach(im=>{ im.style.scale=(1+0.07*clamp(t/TOTAL)).toFixed(4); });
+  };
+  window.seek(0);
+  document.documentElement.setAttribute('data-ready','1');
+})();""" % {"total": total_s, "h": h, "i": index}
+
+
+def animate(folder, seconds=4.0, fps=24, size="portrait", audio=None, transition="slideleft", combined=True, clips=True, workers=3):
+    """Animated videos from a Carousel Studio folder: text rises in line by line, photos drift, slides swipe together."""
+    import concurrent.futures
+    import tempfile
+    import animate as A
+    ffmpeg = A.need_ffmpeg()
+    folder = pathlib.Path(folder).resolve()
+    plan = load_plan(folder)
+    slides = plan.get("slides") or []
+    if not slides:
+        return 0
+    if not E.find_chrome():
+        sys.exit("I need Google Chrome (or Edge, Brave, Chromium) to make the videos. Install Chrome, then try again.")
+    h = 1920 if size == "story" else H
+    theme = resolve_theme(plan)
+    ctx = ctx_base(plan)
+    ctx["theme"], ctx["n"] = theme, len(slides)
+    photos = photo_map(folder, slides, True)
+    total_s = seconds + A.LEAD
+    pages = [write_page(folder, plan, f"anim-{i + 1:02d}.html", photos, ctx, theme, tail_js=_anim_js(i, total_s, h)) for i in range(len(slides))]
+    with concurrent.futures.ThreadPoolExecutor(max_workers=max(1, workers)) as ex:
+        all_frames = list(ex.map(lambda p: A.capture_frames(p, W, h, fps, total_s), pages))
+    out_dir = folder / "animated"
+    skip = int(round(A.SKIP * fps))
+    made = 0
+    if plan.get("kind") == "quotes":
+        for i, fr in enumerate(all_frames):
+            A.encode(ffmpeg, fr[skip:], fps, out_dir / f"quote-{i + 1:02d}.mp4")
+            made += 1
+        return made
+    if clips:
+        for i, fr in enumerate(all_frames):
+            A.encode(ffmpeg, fr[skip:], fps, out_dir / f"slide-{i + 1:02d}.mp4")
+            made += 1
+    if combined:
+        with tempfile.TemporaryDirectory() as td:
+            cl, durs = [], []
+            for i, fr in enumerate(all_frames):
+                use = fr[skip:] if i == 0 else fr
+                cp = pathlib.Path(td) / f"c{i:02d}.mp4"
+                A.encode(ffmpeg, use, fps, cp)
+                cl.append(cp)
+                durs.append(len(use) / fps)
+            A.join_clips(ffmpeg, cl, durs, folder / "carousel-animated.mp4", transition, 0.5, audio)
+        made += 1
+    return made
+
+
+def studio_folders(target):
+    """Folders under target (or target itself) that hold a Carousel Studio plan.json with slides."""
+    target = pathlib.Path(target)
+    base = target if target.is_dir() else target.parent
+    found = []
+    cands = [base / "plan.json"] + sorted(base.rglob("plan.json"))
+    for p in cands:
+        if not p.exists() or p.parent in found:
+            continue
+        if any(part.startswith("_") or part == "animated" for part in p.relative_to(base).parts[:-1]):
+            continue
+        data = E.load_json(p, {})
+        if isinstance(data, dict) and data.get("slides") and "pieces" not in data:
+            found.append(p.parent)
+    return found
+
+
 # -------------------------------------------------------------------- main ----
 
 def main():
@@ -666,6 +1023,19 @@ def main():
     e.add_argument("folder")
     e.add_argument("--no-open", action="store_true")
     e.add_argument("--port", type=int)
+    pk = sub.add_parser("pack")
+    pk.add_argument("target")
+    pk.add_argument("--no-pdf", action="store_true")
+    pk.add_argument("--force", action="store_true")
+    an = sub.add_parser("animate")
+    an.add_argument("target")
+    an.add_argument("--seconds", type=float, default=4.0)
+    an.add_argument("--fps", type=int, default=24)
+    an.add_argument("--size", choices=["portrait", "story"], default="portrait")
+    an.add_argument("--audio")
+    an.add_argument("--transition", default="slideleft")
+    an.add_argument("--no-combined", action="store_true")
+    an.add_argument("--no-slides", action="store_true")
     sub.add_parser("themes")
     a = ap.parse_args()
     if a.cmd == "gallery":
@@ -677,12 +1047,21 @@ def main():
     elif a.cmd == "sheet":
         folder = pathlib.Path(a.folder).resolve()
         plan = load_plan(folder)
-        imgs = sorted((folder / "slides").glob("slide-*.*"))
+        imgs = slide_images(folder, plan)
         if not imgs:
             sys.exit("No slides yet. Run build first.")
         import re
         lays = [p.get("layout") or "" for p in plan.get("slides", [])]
         print(contact_sheet(folder, plan, imgs, lays))
+    elif a.cmd == "pack":
+        pack(a.target, pdf=not a.no_pdf, force=a.force)
+    elif a.cmd == "animate":
+        total = 0
+        for fo in studio_folders(a.target):
+            n = animate(fo, a.seconds, a.fps, a.size, a.audio, a.transition, not a.no_combined, not a.no_slides)
+            total += n
+            print(f"ok  {fo.name}: {n} video file(s)")
+        print(f"Done. {total} video file(s) written.")
     elif a.cmd == "edit":
         edit(a.folder, not a.no_open, a.port)
     elif a.cmd == "themes":

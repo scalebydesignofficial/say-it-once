@@ -4,7 +4,8 @@
 Usage:
     python3 scripts/animate.py <file-or-folder> [options]
 
-For each carousel JSON this writes, next to it:
+Works on Carousel Studio carousels and quote graphics (a folder with plan.json) and on older carousel JSON files.
+For each carousel this writes, next to it:
     carousel-animated.mp4      all slides in one video with swipe transitions (great as a Reel or Story)
     animated/slide-NN.mp4      one short clip per slide (post these as video slides in a carousel)
 For each quote graphics JSON:
@@ -34,6 +35,11 @@ sys.path.insert(0, str(pathlib.Path(__file__).resolve().parent))
 import engine_lib as E  # noqa: E402
 import cdp  # noqa: E402
 import render as R  # noqa: E402
+for _s in (sys.stdout, sys.stderr):  # Windows consoles can choke on curly quotes and emoji; never crash on printing
+    try:
+        _s.reconfigure(encoding="utf-8", errors="replace")
+    except Exception:  # noqa: BLE001
+        pass
 
 LEAD = 0.35
 SKIP = 0.25  # seconds trimmed from the start of stand-alone clips
@@ -169,12 +175,28 @@ def main():
     seconds = args.seconds or float(acfg.get("seconds", 4.0))
     fps = args.fps or int(acfg.get("fps", 24))
     w, h = E.SIZES.get(brand.get("size"), E.SIZES["portrait"])
+    made, car_i = 0, 0
+    # Carousel Studio carousels and quote graphics (the normal case)
+    import carousel_studio as CS
+    for fo in CS.studio_folders(args.target):
+        plan_kind = E.load_json(fo / "plan.json", {}).get("kind")
+        if plan_kind == "quotes" and args.no_quotes:
+            continue
+        try:
+            n = CS.animate(fo, seconds, fps, "story" if brand.get("size") == "story" else "portrait", args.audio, args.transition,
+                           not args.no_combined, not args.no_slides, args.workers)
+            made += n
+            print(f"ok  {fo.name}: {n} video file(s)")
+        except Exception as exc:
+            print(f"FAILED {fo}: {exc}")
     files = R.collect(args.target)
     if not files:
-        sys.exit(f"No carousel or quote JSON files found in {args.target}")
+        if not made:
+            sys.exit(f"No carousel or quote files found in {args.target}")
+        print(f"Done. {made} video file(s) written.")
+        return
     total_s = seconds + LEAD
 
-    made, car_i = 0, 0
     for f in files:
         data = E.load_json(f, {})
         is_quotes = "quotes" in data

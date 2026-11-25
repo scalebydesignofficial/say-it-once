@@ -27,7 +27,17 @@ Everything lives in one folder per carousel. Put new ones in `outputs/carousels/
 
 `python3 scripts/carousel_studio.py edit <folder>` opens the editor in their own browser (run it in the background; it keeps running while they edit). Tell them: "Click any words to change them, pick a new layout on the right, drag a photo to move it, drag slides on the left to reorder. When you love it, press Export." Export saves `slides/`, `caption.txt`, `contact-sheet.jpg` and a zip with all of it in the carousel folder.
 
+The visual page (`engine/03-run-pipeline.md`, step 8b) has a "Copy what to say to Claude" button on every carousel. The person pastes that phrase into the chat, and you open the editor for them (there is no link to the editor on the page, because it only runs on their computer while you have started it). When they finish and press Export (or say they are done), run `python3 scripts/build_artifact.py outputs/<batch-folder>` and republish the visual page. It rebuilds the slides and re-renders the video from their edits, so the page, the downloads and the video all match what they made.
+
 Every change they make in the editor saves into `plan.json`, so you can keep working from it in chat. Read `plan.json` again before you change anything after they have edited.
+
+## Animate it
+
+`python3 scripts/animate.py <carousel folder>` makes `carousel-animated.mp4` (one swipe-through video for a Reel or Story) and `animated/slide-NN.mp4` (one clip per slide). Needs ffmpeg (see `scripts/doctor.py`). Add `--size story` for a 9:16 Story. Tell them where the files are.
+
+## Photos made for them
+
+If they have no photos and want some, follow `engine/08-images.md`, then set `"photo"` on the slides or just run `python3 scripts/carousel_studio.py pack` on a pack folder.
 
 ## plan.json
 

@@ -12,7 +12,10 @@
     "email": 5,
     "instagram_post": 5,
     "instagram_story": 3,
-    "facebook_post": 5
+    "facebook_post": 5,
+    "linkedin_post": 3,
+    "pinterest_pin": 6,
+    "youtube": 1
   },
   "formats": {
     "carousel": true,
@@ -26,7 +29,10 @@
     "email": true,
     "talking_points": true,
     "instagram_post": true,
-    "facebook_post": true
+    "facebook_post": true,
+    "linkedin_post": true,
+    "pinterest_pin": true,
+    "youtube": true
   },
   "cadence": {
     "start_date": null,
@@ -66,5 +72,12 @@
     "make_slide_clips": true,
     "make_combined": true,
     "make_quotes": true
+  },
+  "images": {
+    "provider": "auto",
+    "quality": "medium",
+    "style": "",
+    "model_openai": "gpt-image-1",
+    "model_gemini": "gemini-2.5-flash-image"
   }
 }

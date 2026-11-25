@@ -27,7 +27,7 @@ If `cadence.start_date` is null the script starts on the next Monday.
 ```
 
 Fields:
-- `format`: carousel, quote, reel, short-video, thread, note, substack-article, blog, email, instagram-post, story, facebook-post
+- `format`: carousel, quote, reel, short-video, thread, note, substack-article, blog, email, instagram-post, story, facebook-post, linkedin-post, pinterest-pin, youtube
 - `video_file`: optional path to an animated version (for example `01-lesson/carousels/01-name/carousel-animated.mp4`)
 - `stage`: reach, warm, or ready (see `brand/offer.md`)
 - `day`: posting day number (1 is the first posting day). Leave it out or use `"status": "bank"` for pieces saved for later.
@@ -42,7 +42,7 @@ Fields:
 4. **Variety.** Never the same main format two days in a row. If reels are on, at least two a week. Carousels two or three a week. Quote graphics fill gaps and can post alongside a heavier piece.
 5. **Each day:** one main piece (carousel, reel, or short video), plus optional supporting pieces (a thread, a note, a quote graphic). Respect `max_pieces_per_day`.
 6. **Long form.** One Substack article and one blog post per week if those are on. Emails on two fixed weekdays (usually Tuesday and Thursday). Put long-form on days with a lighter main piece.
-7. **Slots.** Scroll content (carousels, quotes) in the morning. Text pieces (threads, notes, Facebook posts, Instagram text posts) at midday. Story sequences in the afternoon or evening. Video (reels, short videos) in the evening. Emails in the morning.
+7. **Slots.** Scroll content (carousels, quotes) in the morning. Text pieces (threads, notes, Facebook posts, LinkedIn posts, Instagram text posts) at midday. Pinterest pins and YouTube uploads in the evening. Story sequences in the afternoon or evening. Video (reels, short videos) in the evening. Emails in the morning.
 8. **Multiple sources.** For a course or series, keep lesson order: the first lesson's best pieces lead. For unrelated sources, interleave them so no two days feel the same.
 9. **Spread one source out.** Pieces from the same source should not all land the same week unless it is a launch or a series.
 10. **Match their time.** If they said they have little time, schedule fewer pieces per day and group video days.

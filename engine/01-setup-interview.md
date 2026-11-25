@@ -18,17 +18,18 @@ Ask:
 - In one sentence, what do you sell or teach?
 - Who is it for? Describe her or him or them like a real person.
 - What is the one problem they are stuck on that you solve?
+- In her words: what do your people say out loud, or think at night, about this problem? Give me three to five real sentences. Save them in `brand/profile.md` under "In her people's words." These become the lines that make her reader think "that is me." Quote only what they give you.
 
 ## Step 2. Where they show up
 
-Ask (multiple choice, pick all that apply): Instagram, Facebook, TikTok, Threads, Substack, YouTube Shorts, Blog, Email list.
+Ask (multiple choice, pick all that apply): Instagram, Facebook, TikTok, Threads, LinkedIn, Pinterest, YouTube (long videos or Shorts), Substack, Blog, Email list.
 
 Then ask: how many days a week do you want to post, and how much time can you give to recording or posting?
 
 Also ask: do you have photos you like using (of you, your space, your products, mood images), or would you like help getting photos? Note the answer in `brand/profile.md`. If they have photos, tell them to drop them in `brand/photos/`. If they want help, mention that for each carousel the engine can write image prompts for an AI image tool, or they can use stock photos from a site whose license allows it. Never download or fetch images for them from the web.
 
 Turn this into `config.json`:
-- `formats`: turn off formats for platforms they do not use. Instagram posts and stories need Instagram. Facebook posts need Facebook. Talking points are always useful, so keep them on. Carousels and quote graphics need Instagram or Facebook. Reels and short videos need Instagram, TikTok, or YouTube Shorts. Threads need Threads. Notes and articles need Substack. Blog needs a blog. Emails need an email list.
+- `formats`: turn off formats for platforms they do not use. Instagram posts and stories need Instagram. Facebook posts need Facebook. Talking points are always useful, so keep them on. Carousels and quote graphics need Instagram or Facebook. Reels and short videos need Instagram, TikTok, or YouTube Shorts. Threads need Threads. Notes and articles need Substack. Blog needs a blog. Emails need an email list. LinkedIn posts need LinkedIn. Pinterest pins need Pinterest. YouTube titles and descriptions need YouTube (long videos or Shorts).
 - `cadence.post_days`: Monday is 0 and Sunday is 6. Match their answer. Default is Monday to Saturday.
 - If they have very little time, lower `counts` and the posts per day.
 

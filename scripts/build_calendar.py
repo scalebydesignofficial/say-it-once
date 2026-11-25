@@ -32,6 +32,11 @@ import json
 import pathlib
 import sys
 from collections import Counter, defaultdict
+for _s in (sys.stdout, sys.stderr):  # Windows consoles can choke on curly quotes and emoji; never crash on printing
+    try:
+        _s.reconfigure(encoding="utf-8", errors="replace")
+    except Exception:  # noqa: BLE001
+        pass
 
 ROOT = pathlib.Path(__file__).resolve().parent.parent
 WEEKDAYS = ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"]
@@ -39,12 +44,14 @@ FORMAT_LABEL = {
     "carousel": "Carousel", "quote": "Quote graphic", "reel": "Reel (talking)", "short-video": "Short video",
     "thread": "Thread", "note": "Substack note", "substack-article": "Substack article",
     "blog": "Blog post", "email": "Email", "instagram-post": "Instagram post", "story": "Story sequence",
-    "facebook-post": "Facebook post",
+    "facebook-post": "Facebook post", "linkedin-post": "LinkedIn post", "pinterest-pin": "Pinterest pin",
+    "youtube": "YouTube video + description",
 }
 DEFAULT_PLATFORM = {
     "carousel": "Instagram", "quote": "Instagram", "reel": "Instagram", "short-video": "TikTok",
     "thread": "Threads", "note": "Substack", "substack-article": "Substack", "blog": "Blog", "email": "Email",
     "instagram-post": "Instagram", "story": "Instagram", "facebook-post": "Facebook",
+    "linkedin-post": "LinkedIn", "pinterest-pin": "Pinterest", "youtube": "YouTube",
 }
 DEFAULT_SLOTS = {"morning": "8:00 AM", "midday": "12:00 PM", "evening": "7:00 PM"}
 

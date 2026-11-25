@@ -12,6 +12,11 @@ import json
 import pathlib
 import re
 import sys
+for _s in (sys.stdout, sys.stderr):  # Windows consoles can choke on curly quotes and emoji; never crash on printing
+    try:
+        _s.reconfigure(encoding="utf-8", errors="replace")
+    except Exception:  # noqa: BLE001
+        pass
 
 ROOT = pathlib.Path(__file__).resolve().parent.parent
 EM, EN, SPARKLE = "—", "–", "✨"
@@ -73,7 +78,7 @@ def collect(target):
     out = []
     for p in sorted(t.rglob("*")):
         if p.is_file() and p.suffix in (".md", ".txt", ".json") and not p.name.startswith("00-") \
-                and "_html" not in p.parts and p.name not in ("plan.json",) and not p.name.startswith("content-calendar"):
+                and "_html" not in p.parts and p.name not in ("plan.json",) and ".before-edit" not in p.name and not p.name.startswith("content-calendar"):
             out.append(p)
     return out
 

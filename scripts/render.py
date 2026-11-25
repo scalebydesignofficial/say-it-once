@@ -15,6 +15,11 @@ import sys
 
 sys.path.insert(0, str(pathlib.Path(__file__).resolve().parent))
 import engine_lib as E  # noqa: E402
+for _s in (sys.stdout, sys.stderr):  # Windows consoles can choke on curly quotes and emoji; never crash on printing
+    try:
+        _s.reconfigure(encoding="utf-8", errors="replace")
+    except Exception:  # noqa: BLE001
+        pass
 
 
 def collect(target):
@@ -25,6 +30,10 @@ def collect(target):
     for p in sorted(target.rglob("*.json")):
         if p.name.startswith("_") or "_html" in p.parts or p.name in ("plan.json",):
             continue
+        if ".before-edit" in p.name or p.name.startswith("plan"):
+            continue  # editor backups and plans are not content
+        if (p.parent / "plan.json").exists():
+            continue  # anything next to a Carousel Studio plan is made by Carousel Studio (scripts/carousel_studio.py pack)
         data = E.load_json(p, {})
         if isinstance(data, dict) and ("slides" in data or "quotes" in data):
             found.append(p)

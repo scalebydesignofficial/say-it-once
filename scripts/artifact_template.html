@@ -1,0 +1,169 @@
+<title>{{TITLE}} Pack</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="stylesheet" href="{{FONT_LINK}}">
+<style>
+/* Layout: a branded content library. Hero summary, sticky section chips, then one long scroll of cards with copy buttons. */
+:root{
+  --bg:{{C_BG}}; --surface:{{C_SURFACE}}; --ink:{{C_INK}}; --muted:{{C_MUTED}}; --line:{{C_LINE}};
+  --accent:{{C_ACCENT}}; --accent-ink:{{C_ACCENT_INK}}; --lav:{{C_ACC2}}; --lav-ink:{{C_INK}};
+  --display:"{{FONT_DISPLAY}}",Georgia,serif; --body:"{{FONT_BODY}}",system-ui,-apple-system,"Segoe UI",sans-serif; --hand:"{{FONT_HAND}}","Bradley Hand",cursive; --dw:{{DW}};
+}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){--bg:{{D_BG}};--surface:{{D_SURFACE}};--ink:#F5F5F5;--muted:#A8A8A2;--line:{{D_LINE}};--accent:{{D_ACCENT}};--accent-ink:#131313;--lav:{{D_ACC2}};--lav-ink:#F2EEFA;color-scheme:dark}}
+:root[data-theme="dark"]{--bg:{{D_BG}};--surface:{{D_SURFACE}};--ink:#F5F5F5;--muted:#A8A8A2;--line:{{D_LINE}};--accent:{{D_ACCENT}};--accent-ink:#131313;--lav:{{D_ACC2}};--lav-ink:#F2EEFA;color-scheme:dark}
+*{box-sizing:border-box}
+body{background:var(--bg);color:var(--ink);font-family:var(--body);font-size:16px;line-height:1.6;padding-block:0 4rem}
+.wrap{max-width:980px;margin-inline:auto;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+.hero{background:{{D_BG}};color:#FFFFFF;margin-top:calc(-1 * env(safe-area-inset-top,0px));padding-top:calc(env(safe-area-inset-top,0px) + 2.5rem);padding-bottom:2rem}
+.hero .hand{font-family:var(--hand);font-size:1.6rem;color:{{D_ACCENT}};line-height:1;margin:0 0 .25rem}
+.hero h1{font-family:var(--display);font-weight:var(--dw);font-size:clamp(2.1rem,6vw,3.6rem);line-height:1.02;margin:0 0 .75rem;text-wrap:balance;letter-spacing:-.01em}
+.hero p.lede{max-width:56ch;margin:0 0 1.25rem;font-size:1.05rem}
+.stats{display:flex;flex-wrap:wrap;gap:.5rem}
+.stats span{background:var(--surface);color:var(--ink);border-radius:999px;padding:.3rem .8rem;font-size:.85rem;font-weight:500}
+.stats b{font-family:var(--display);font-weight:var(--dw);margin-right:.3rem;color:var(--accent)}
+nav.chips{position:sticky;top:env(safe-area-inset-top,0px);z-index:20;background:var(--bg);border-bottom:1px solid var(--line)}
+body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);z-index:30;background:var(--bg)}
+nav.chips .wrap{display:flex;gap:.4rem;overflow-x:auto;padding-block:.6rem;scrollbar-width:thin}
+nav.chips a{flex:none;color:var(--ink);text-decoration:none;font-size:.85rem;font-weight:500;padding:.3rem .8rem;border:1px solid var(--line);border-radius:999px;background:var(--surface)}
+nav.chips a:hover,nav.chips a:focus-visible{background:var(--accent);color:var(--accent-ink);border-color:var(--accent);outline:none}
+.sec{padding-block:2.5rem 0;scroll-margin-top:3.5rem}
+.sh{margin-bottom:1.25rem}
+.sh h2{font-family:var(--display);font-weight:var(--dw);font-size:clamp(1.5rem,4vw,2.1rem);margin:0 0 .25rem;line-height:1.1;text-wrap:balance}
+.sh p{margin:0;color:var(--muted);max-width:60ch}
+h3.sub{font-family:var(--display);font-weight:var(--dw);font-size:1.15rem;margin:1.75rem 0 .75rem}
+.card{background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:1.1rem 1.25rem 1.25rem;margin-bottom:1rem;min-width:0}
+.card>header{display:flex;justify-content:space-between;align-items:flex-start;gap:1rem;margin-bottom:.5rem}
+.card .k{font-family:var(--hand);font-size:1.25rem;color:var(--accent);line-height:1}
+.card h3{font-size:1.1rem;line-height:1.3;margin:.1rem 0 0;font-weight:700;text-wrap:balance}
+.copy{flex:none;font:inherit;font-size:.8rem;font-weight:700;border:1px solid var(--ink);background:transparent;color:var(--ink);border-radius:999px;padding:.3rem .85rem;cursor:pointer}
+.copy:hover,.copy:focus-visible{background:var(--accent);border-color:var(--accent);color:var(--accent-ink);outline:none}
+.copy.done{background:var(--ink);color:var(--bg)}
+.body{max-width:68ch;overflow-wrap:anywhere}
+.body p{margin:.55rem 0}
+.body h2,.body h3,.body h4{font-family:var(--body);font-weight:700;margin:1.25rem 0 .3rem;line-height:1.3}
+.body h2{font-size:1.1rem}.body h3{font-size:1rem}.body h4{font-size:.8rem;text-transform:uppercase;letter-spacing:.08em;color:var(--muted)}
+.body ul,.body ol{padding-left:1.3rem;margin:.5rem 0}
+.body li{margin:.2rem 0}.body li.sub{list-style:none;color:var(--muted);margin-left:.5rem}
+.meta{font-size:.92rem}.meta b{display:inline-block;margin-right:.35rem;font-size:.72rem;text-transform:uppercase;letter-spacing:.08em;color:var(--muted)}
+.tn{display:flex;gap:.7rem}.tn span{flex:none;font-weight:700;color:var(--accent);min-width:1.6rem}
+.seo{background:var(--bg);border-radius:8px;padding:.6rem .9rem;margin:.5rem 0 1rem;font-size:.9rem}
+.spoken{margin-top:1rem;background:var(--lav);color:var(--lav-ink);border-radius:8px;padding:.5rem 1rem 1rem}
+.spoken h4{color:inherit;opacity:.75}
+.strip{display:flex;gap:.6rem;overflow-x:auto;padding-block:.5rem .8rem;scroll-snap-type:x proximity}
+.slide{flex:none;width:min(52vw,220px);padding:0;border:1px solid var(--line);border-radius:6px;overflow:hidden;cursor:zoom-in;background:var(--bg);scroll-snap-align:start}
+.slide img,.qcell img{display:block;width:100%;height:auto}
+.vid{margin:.25rem 0 .5rem}.vid summary{cursor:pointer;font-weight:700;font-size:.9rem}.vid video{display:block;margin-top:.6rem;max-width:min(100%,320px);border-radius:8px}
+.edit{display:flex;flex-wrap:wrap;gap:.6rem;align-items:center;background:var(--lav);color:var(--lav-ink);border-radius:8px;padding:.75rem 1rem;margin:.25rem 0 .5rem}
+.edit p{flex-basis:100%;margin:0;font-size:.85rem}
+.btn{display:inline-block;background:var(--accent);color:var(--accent-ink);font-weight:700;font-size:.85rem;text-decoration:none;border-radius:999px;padding:.4rem 1rem}
+.btn:hover,.btn:focus-visible{outline:2px solid var(--ink);outline-offset:2px}
+.edit .copy{border-color:var(--lav-ink);color:var(--lav-ink)}
+.edit .studio{background:var(--accent);border-color:var(--accent);color:var(--accent-ink);font-size:.9rem;padding:.45rem 1.1rem}
+.edit .studio.done{background:var(--ink);border-color:var(--ink);color:var(--bg)}
+.dlrow{display:flex;flex-wrap:wrap;gap:.5rem;margin:.25rem 0 .75rem}
+.dl{font:inherit;font-size:.82rem;font-weight:700;border:0;background:var(--accent);color:var(--accent-ink);border-radius:999px;padding:.4rem 1rem;cursor:pointer}
+.dl:hover,.dl:focus-visible{outline:2px solid var(--ink);outline-offset:2px}
+.qwrap{position:relative;min-width:0}
+.qdl{position:absolute;right:.5rem;bottom:.5rem;padding:.3rem .75rem;font-size:.75rem}
+#toast{position:fixed;left:50%;transform:translateX(-50%);bottom:max(16px,env(safe-area-inset-bottom,0px));z-index:60;background:var(--ink);color:var(--bg);padding:.6rem 1rem;border-radius:999px;font-size:.85rem;max-width:calc(100vw - 32px)}
+#lbdl{position:absolute;right:1rem;bottom:max(1rem,env(safe-area-inset-bottom,0px));cursor:pointer}
+.capt{border-top:1px solid var(--line);margin-top:.5rem;padding-top:.25rem}
+.qgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(min(100%,200px),1fr));gap:.75rem}
+.qcell{padding:0;border:1px solid var(--line);border-radius:8px;overflow:hidden;cursor:zoom-in;background:var(--surface)}
+.cal{display:grid;gap:.75rem;grid-template-columns:repeat(auto-fill,minmax(min(100%,290px),1fr))}
+.day{background:var(--surface);border:1px solid var(--line);border-radius:10px;overflow:hidden;min-width:0}
+.dh{display:flex;justify-content:space-between;align-items:baseline;padding:.55rem .9rem;background:var(--lav);color:var(--lav-ink);font-size:.85rem}
+.dh b{font-family:var(--display);font-weight:var(--dw);font-size:1rem}
+.item{display:grid;grid-template-columns:4.2rem 1fr auto;gap:.6rem;padding:.55rem .9rem;border-top:1px solid var(--line);font-size:.88rem;align-items:start}
+.item .tm{color:var(--muted);font-variant-numeric:tabular-nums;font-size:.8rem}.item .hk{color:var(--muted);overflow-wrap:anywhere}
+.item{color:inherit;text-decoration:none;cursor:pointer}
+.item:hover,.item:focus-visible{background:var(--bg);outline:none}
+.open{display:block;margin-top:.2rem;font-size:.75rem;font-weight:700;color:var(--accent)}
+.open::after{content:" \2192"}
+.card,.qcell{scroll-margin-top:4.5rem}
+.flash{animation:flash 2s ease-out}
+@keyframes flash{0%,60%{outline:3px solid var(--accent);outline-offset:3px}100%{outline:3px solid transparent;outline-offset:3px}}
+@media (prefers-reduced-motion:reduce){.flash{animation:none;outline:3px solid var(--accent);outline-offset:3px}}
+.pill{font-size:.68rem;font-weight:700;text-transform:uppercase;letter-spacing:.06em;border-radius:999px;padding:.1rem .5rem;border:1px solid var(--line);color:var(--muted)}
+.st-warm .pill{border-color:var(--accent);color:var(--accent)}.st-ready .pill{background:var(--accent);border-color:var(--accent);color:var(--accent-ink)}
+.bank{display:grid;gap:.4rem;font-size:.9rem;color:var(--muted)}.bank b{color:var(--ink)}
+.review .card{border-color:var(--accent)}
+#lb{position:fixed;inset:0;z-index:50;background:rgba(10,10,10,.88);display:flex;align-items:center;justify-content:center;padding:1rem;cursor:zoom-out}
+#lb[hidden]{display:none}#lb img{max-width:100%;max-height:100%;border-radius:8px}
+footer{margin-top:3rem;color:var(--muted);font-size:.85rem}
+@media (prefers-reduced-motion:no-preference){html{scroll-behavior:smooth}}
+@media (max-width:520px){.card{padding:.9rem 1rem 1rem}.item{grid-template-columns:3.6rem 1fr}.item .pill{grid-column:2;justify-self:start}}
+</style>
+<header class="hero"><div class="wrap">
+  <p class="hand">Your content pack</p>
+  <h1>{{TITLE}}</h1>
+  <p class="lede">Everything made from your material, in one place. Copy any piece, tap any image to enlarge it, and follow the calendar day by day.</p>
+  <div class="stats">{{STATS}}</div>
+</div></header>
+<nav class="chips" aria-label="Sections"><div class="wrap">{{NAV}}</div></nav>
+<main>
+{{BODY}}
+<div class="wrap"><footer>Nothing here has been posted. You publish when you are ready.</footer></div>
+</main>
+<div id="lb" hidden><img alt=""><button id="lbdl" class="dl" type="button">Download image</button></div>
+<div id="toast" role="status" hidden></div>
+<script>
+(function(){
+  function fallbackCopy(t){var a=document.createElement("textarea");a.value=t;a.style.position="fixed";a.style.opacity="0";document.body.appendChild(a);a.select();try{document.execCommand("copy")}catch(e){}document.body.removeChild(a)}
+  function toast(m){var t=document.getElementById("toast");t.textContent=m;t.hidden=false;clearTimeout(toast.h);toast.h=setTimeout(function(){t.hidden=true},4500)}
+  function uriBlob(u){var p=u.split(","),m=/data:([^;]+)/.exec(p[0])[1],b=atob(p[1]),n=b.length,a=new Uint8Array(n);for(var i=0;i<n;i++)a[i]=b.charCodeAt(i);return new Blob([a],{type:m})}
+  var T=null;
+  function crc32(u){if(!T){T=new Uint32Array(256);for(var n=0;n<256;n++){var c=n;for(var k=0;k<8;k++)c=c&1?0xEDB88320^(c>>>1):c>>>1;T[n]=c>>>0}}var c=0xFFFFFFFF;for(var i=0;i<u.length;i++)c=T[(c^u[i])&255]^(c>>>8);return(c^0xFFFFFFFF)>>>0}
+  function makeZip(files){var enc=new TextEncoder(),parts=[],central=[],off=0;
+    files.forEach(function(f){var nm=enc.encode(f.name),crc=crc32(f.bytes),sz=f.bytes.length;
+      var lh=new DataView(new ArrayBuffer(30));lh.setUint32(0,0x04034b50,true);lh.setUint16(4,20,true);lh.setUint16(6,0x0800,true);lh.setUint16(12,0x21,true);lh.setUint32(14,crc,true);lh.setUint32(18,sz,true);lh.setUint32(22,sz,true);lh.setUint16(26,nm.length,true);
+      parts.push(lh.buffer,nm,f.bytes);
+      var ch=new DataView(new ArrayBuffer(46));ch.setUint32(0,0x02014b50,true);ch.setUint16(4,20,true);ch.setUint16(6,20,true);ch.setUint16(8,0x0800,true);ch.setUint16(14,0x21,true);ch.setUint32(16,crc,true);ch.setUint32(20,sz,true);ch.setUint32(24,sz,true);ch.setUint16(28,nm.length,true);ch.setUint32(42,off,true);
+      central.push(ch.buffer,nm);off+=30+nm.length+sz});
+    var csz=0;central.forEach(function(c){csz+=c.byteLength!==undefined?c.byteLength:c.length});
+    var end=new DataView(new ArrayBuffer(22));end.setUint32(0,0x06054b50,true);end.setUint16(8,files.length,true);end.setUint16(10,files.length,true);end.setUint32(12,csz,true);end.setUint32(16,off,true);
+    return new Blob(parts.concat(central,[end.buffer]),{type:"application/zip"})}
+  function bytesOf(blob){return blob.arrayBuffer().then(function(b){return new Uint8Array(b)})}
+  function save(name,data){
+    var u=null;try{u=(window.claude&&window.claude.use)?window.claude.use("downloads"):null}catch(e){}
+    return Promise.resolve(u).then(function(d){
+      if(!d){toast("Downloads are not available in this view. Open this page in Claude to download.");return}
+      return d.save({filename:name,data:data}).then(function(){toast("Saved "+name)},function(e){if(e&&e.code==="declined")return;toast("Could not save "+name+(e&&e.message?": "+e.message:""))})
+    },function(){toast("Downloads are not available in this view.")})}
+  /* The page shows a light copy of each image. A download uses the full-quality file published beside the page, and falls back to the light copy if that file cannot be loaded. */
+  function fetchBlob(src){return fetch(src).then(function(r){if(!r.ok)throw new Error("missing");return r.blob()})}
+  function original(cell){
+    var name=cell.getAttribute("data-name"),orig=cell.getAttribute("data-orig"),img=cell.querySelector("img");
+    return fetchBlob(orig).then(function(b){return{name:name,blob:b}},function(){return{name:name.replace(/\.png$/,".jpg"),blob:uriBlob(img.src)}})}
+  function handleDl(b){
+    var kind=b.getAttribute("data-dl"),name=b.getAttribute("data-name"),src=b.getAttribute("data-src");
+    if(kind==="img"){var cell=b.parentNode.querySelector(".qcell");original(cell).then(function(o){save(o.name,o.blob)});return}
+    if(kind==="pdf"){fetchBlob(src).then(function(bl){save(name,bl)},function(){toast("The PDF could not be loaded. Ask Claude to refresh this page.")});return}
+    if(kind==="zip"||kind==="zipq"){
+      var scope=b.closest(kind==="zip"?".card":"section"),cells=[].slice.call(scope.querySelectorAll(kind==="zip"?".slide":".qcell"));
+      var cp=kind==="zip"?scope.querySelector(".copy[data-copy]"):null;
+      Promise.all(cells.map(function(c){return original(c).then(function(o){return bytesOf(o.blob).then(function(u){return{name:o.name,bytes:u}})})})).then(function(fs){
+        if(cp)fs.push({name:"caption.txt",bytes:new TextEncoder().encode(cp.getAttribute("data-copy"))});
+        save(name,makeZip(fs))});return}
+    if(kind==="video"){
+      var card=b.closest(".card"),v=card&&card.querySelector("video");
+      fetchBlob(src).then(function(bl){save(name,bl)},function(){
+        if(v&&v.src){toast("Saving the smaller preview version of the video.");save(name,uriBlob(v.src))}else toast("The video could not be loaded. Ask Claude to refresh this page.")});return}
+  }
+  document.addEventListener("click",function(ev){
+    var dl=ev.target.closest(".dl");
+    if(dl&&dl.id==="lbdl"){var lb0=document.getElementById("lb");original(lb0._cell).then(function(o){save(o.name,o.blob)});return}
+    if(dl){handleDl(dl);return}
+    var b=ev.target.closest(".copy");
+    if(b){var t=b.getAttribute("data-copy")||"";var done=function(){var tm=b.getAttribute("data-toast");if(tm)toast(tm);var o=b.textContent;b.textContent="Copied";b.classList.add("done");setTimeout(function(){b.textContent=o;b.classList.remove("done")},1400)};
+      if(navigator.clipboard&&navigator.clipboard.writeText){navigator.clipboard.writeText(t).then(done,function(){fallbackCopy(t);done()})}else{fallbackCopy(t);done()}return}
+    var s=ev.target.closest("[data-full]");
+    if(s){var lb=document.getElementById("lb");lb.querySelector("img").src=s.querySelector("img").src;lb._cell=s;lb.hidden=false;return}
+    var g=ev.target.closest("[data-go]");
+    if(g){ev.preventDefault();var te=document.getElementById(g.getAttribute("data-go"));if(te){te.scrollIntoView({behavior:"smooth",block:"start"});te.classList.remove("flash");void te.offsetWidth;te.classList.add("flash")}return}
+    var n=ev.target.closest("nav.chips a");
+    if(n){ev.preventDefault();var id=n.getAttribute("href").slice(1);var el=document.getElementById(id);if(el){el.scrollIntoView({behavior:"smooth",block:"start"});try{history.replaceState(null,"","#"+id)}catch(x){}}return}
+    if(ev.target.closest("#lb")){document.getElementById("lb").hidden=true}
+  });
+  document.addEventListener("keydown",function(e){if(e.key==="Escape")document.getElementById("lb").hidden=true});
+})();
+</script>

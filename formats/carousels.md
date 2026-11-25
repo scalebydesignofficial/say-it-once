@@ -36,13 +36,15 @@ Use these to make carousels feel designed, not just text on color. Use each only
 - A `point` slide with a kicker that is just a number ("01", "02") shows a giant numeral in some layouts.
 
 ## Photos
-A slide can take a photo background: add `"image": "file-name.jpg"` (a file in `brand/photos/`). Add `"image": false` to keep a slide plain. If the person has photos in `brand/photos/`, the engine puts them on cover, closing, and quote slides automatically, so you do not have to. Optional per slide: `"image_focus": "top"` (or "bottom", "left", "right", "center") to choose which part of the photo shows, and `"tone": "light"` for bright photos.
+Carousels are built by Carousel Studio (`python3 scripts/carousel_studio.py pack <batch>`). It puts photos on covers, closers and quotes by itself: first any picture made for that exact slide (see below), then the person's own photos in `brand/photos/`. You do not choose photo layouts. If they have no photos and want some, write `photo-prompts.json` in the carousel folder (see `engine/08-images.md`): 2 or 3 prompts, each tied to a slide number (the cover, the closer, a quote), with no text in the image, no people's faces, and plenty of calm space for words. Then `engine/08-images.md` explains making the pictures.
 
-If they use AI or stock images and have none yet, write `photo-prompts.md` in the carousel folder: 3 to 5 image prompts that match the carousel's mood, with no text in the image, no people's faces unless they asked, and plenty of calm space for text. Tell them to save the images in `brand/photos/`.
+`"image"` and `"image_focus"` on a slide are not used any more. To pick a specific photo for one slide, give that slide `"photo": {"src": "file.jpg", "x": 50, "y": 30, "zoom": 1}` in the carousel's `plan.json`.
 
-## Decoration and animation
-Decorations (doodles, shapes, textures) are added by the design settings. You do not write them. To turn them off for one slide add `"decor": "none"`.
-Animated versions are made from the same JSON by `scripts/animate.py`. Keep headlines short, because animated text reveals word by word.
+## Layouts and look
+You do not pick layouts when you write `carousel.json`. The pack builder gives each carousel one of three looks (editorial, bold, soft) in turn and chooses a layout for every slide from its type. Write each slide's `type` carefully (`checklist` for steps, `versus` for a myth and truth, `stat` for a real number) because that is what picks the layout. A quote slide with an `attribution` (a name or a Scripture reference) is always given a layout that shows it. The person can change any layout later in the browser editor or by asking.
+
+## Animation
+Animated versions are made from the same slides by `scripts/animate.py` (text rises in line by line, photos drift, slides swipe together). Keep headlines short so they read well while they move.
 
 ## Structure
 - 6 to 10 slides. First is a `cover`, last is a `close` with the next step.

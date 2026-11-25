@@ -7,6 +7,11 @@ Writes 00-preview.html inside the folder.
 import html
 import pathlib
 import sys
+for _s in (sys.stdout, sys.stderr):  # Windows consoles can choke on curly quotes and emoji; never crash on printing
+    try:
+        _s.reconfigure(encoding="utf-8", errors="replace")
+    except Exception:  # noqa: BLE001
+        pass
 
 
 def main():

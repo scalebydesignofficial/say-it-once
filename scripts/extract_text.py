@@ -16,6 +16,11 @@ import subprocess
 import sys
 import xml.etree.ElementTree as ET
 import zipfile
+for _s in (sys.stdout, sys.stderr):  # Windows consoles can choke on curly quotes and emoji; never crash on printing
+    try:
+        _s.reconfigure(encoding="utf-8", errors="replace")
+    except Exception:  # noqa: BLE001
+        pass
 
 ROOT = pathlib.Path(__file__).resolve().parent.parent
 

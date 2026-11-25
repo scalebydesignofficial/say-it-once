@@ -1,5 +1,23 @@
 # What's new
 
+## 1.2.0
+- The setup guide now comes as a designed page too. Double-click START-HERE.html to read it in your browser, with Copy buttons for the words to say.
+- Every run now ends with one visual page. All your carousels, quote graphics, reels, posts, emails, articles and your calendar sit on a single page you can open with a link, with a Copy button on every piece. No more digging through folders.
+- The page uses your own brand fonts.
+- Every piece now follows proven direct-copy principles: it starts inside your reader's situation in her words, is specific, speaks to one person, and points to one next step, so your audience thinks "she is talking about me." Your voice still comes first, and nothing is ever invented. Setup now asks what your people say out loud, and "make it more engaging" rewrites hooks with the same principles.
+- Download from your page: every carousel has buttons for all slides (zip), the PDF and the swipe-through video, and every quote can be downloaded one at a time or all together.
+- Your page, downloads and swipe-through videos now always match what you made in Carousel Studio. The page rebuilds the slides and re-renders the video whenever you changed something.
+- Your calendar is clickable. Each item jumps to its piece on your visual page.
+
+## 1.1.0
+- Everything now uses Carousel Studio. "Run it" builds your carousels and quote graphics with the 36 Studio layouts (each carousel gets its own look), plus a PDF of every carousel. The PDF is the file to upload as a LinkedIn document post.
+- Animated videos now work on Studio carousels and quote graphics: text rises in line by line, photos drift, slides swipe together. Say "animate it".
+- New formats: LinkedIn posts, Pinterest pins (titles and descriptions), and YouTube titles, descriptions and tags for long videos and Shorts.
+- Real pictures: say "make me photos" and, with your own OpenAI or Google Gemini key, the engine makes pictures from written prompts and puts them on your slides. It asks before spending anything.
+- A quote with a name or a Scripture reference always shows it.
+- The Design Studio now shows the real Carousel Studio layouts, changing live as you pick your name, colors and fonts. The old layout menus are gone. The photo layouts show a sample picture, with a note to add your own photos to the brand/photos folder.
+- You choose what each run makes. "Run it" asks: everything, just the visuals, just the written posts, or pick your own, and small, standard or big. You can also say "stop making blog posts" or "start making LinkedIn" any time.
+
 ## 1.0.0
 - Carousel Studio: 36 slide layouts, 8 ready-made themes, and a browser editor where you click to change words, pick layouts, move photos, reorder slides, and export. Say "make me a carousel".
 - "Update me": say it any time to get the newest version. Your brand, voice, photos, and finished packs are never touched.

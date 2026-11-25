@@ -411,6 +411,11 @@
       "--kicker-case": script ? "none" : "uppercase", "--kicker-track": script ? "0" : ".18em",
       "--kicker-weight": 700, "--kicker-size": script ? "62px" : "30px"
     };
+    /* Optional per-layout accents a brand can set (tape on note cards, bookmark on save slides, avatar circle on post cards). */
+    if (col.tape) v["--tape-bg"] = col.tape;
+    if (col.bookmark) v["--bm-fill"] = col.bookmark;
+    if (col.photo_hl) v["--photo-hl"] = col.photo_hl;
+    if (col.avatar) { v["--av-bg"] = col.avatar; v["--av-fg"] = onColor(col.avatar, ["#FFFFFF", "#111111"]); }
     return Object.keys(v).map(function (key) { return key + ":" + v[key]; }).join(";");
   }
 

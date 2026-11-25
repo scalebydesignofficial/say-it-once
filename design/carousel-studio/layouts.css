@@ -20,6 +20,7 @@
 .sio.on-accent .hl{color:var(--fg);background:color-mix(in srgb,var(--fg) 18%,transparent);padding:0 .1em;border-radius:.12em}
 /* highlights stay readable on dark, photo and accent backgrounds */
 .sio.on-dark .K,.sio.on-dark .hl{color:color-mix(in srgb,var(--accent) 55%,#fff)}
+.sio.L-photo-full.on-dark .K,.sio.L-photo-full.on-dark .hl{color:var(--photo-hl,color-mix(in srgb,var(--accent) 55%,#fff))}
 .L-myth-truth .cd.t .hl,.L-before-after .half.b .hl,.L-color-block .hl{color:inherit;text-decoration:underline;text-decoration-thickness:.07em;text-underline-offset:.12em;background:none;padding:0}
 .L-before-after .half.has-photo .hl{color:color-mix(in srgb,var(--accent) 55%,#fff)}
 .sio .muted{color:color-mix(in srgb,var(--fg) 62%,transparent)}
@@ -164,7 +165,7 @@
   background-image:repeating-linear-gradient(to bottom,transparent 0 62px,color-mix(in srgb,var(--accent) 22%,transparent) 62px 64px);
   background-position:0 40px}
 .L-note-card .tape{position:absolute;left:50%;top:-24px;width:200px;height:56px;margin-left:-100px;transform:rotate(-3deg);
-  background:color-mix(in srgb,var(--accent) 40%,rgba(255,255,255,.55))}
+  background:var(--tape-bg,color-mix(in srgb,var(--accent) 40%,rgba(255,255,255,.55)))}
 .L-note-card .fitbox{left:170px;right:170px;top:230px;bottom:220px;transform:rotate(1.4deg);color:var(--ink);--fg:var(--ink)}
 .L-note-card .fi{gap:calc(28px*var(--k))}
 .L-note-card .K{font-size:calc(var(--kicker-size)*.85*var(--k))}
@@ -218,8 +219,8 @@
 .L-quote-post .card{position:absolute;left:84px;right:84px;top:50%;transform:translateY(-50%);background:var(--paper);color:var(--ink);
   border-radius:calc(var(--radius)*1.2);padding:60px 64px 54px;box-shadow:0 30px 70px rgba(0,0,0,.12);--fg:var(--ink)}
 .L-quote-post .who{display:flex;align-items:center;gap:24px;margin-bottom:34px}
-.L-quote-post .av{position:relative;width:110px;height:110px;border-radius:50%;overflow:hidden;flex:none;background:var(--accent);
-  color:var(--on-accent);display:flex;align-items:center;justify-content:center;font:700 52px var(--f-head)}
+.L-quote-post .av{position:relative;width:110px;height:110px;border-radius:50%;overflow:hidden;flex:none;background:var(--av-bg,var(--accent));
+  color:var(--av-fg,var(--on-accent));display:flex;align-items:center;justify-content:center;font:700 52px var(--f-head)}
 .L-quote-post .av .ph{inset:0}
 .L-quote-post .nm{font:700 38px var(--f-body)}
 .L-quote-post .hd{font:400 30px var(--f-body);opacity:.55}
@@ -381,7 +382,7 @@
 
 .L-cta-save{background:var(--accent2)}
 .L-cta-save .bm{position:absolute;left:50%;top:150px;width:200px;height:260px;margin-left:-100px}
-.L-cta-save .bm svg{width:100%;height:100%;fill:var(--accent)}
+.L-cta-save .bm svg{width:100%;height:100%;fill:var(--bm-fill,var(--accent))}
 .L-cta-save .fitbox{left:96px;right:96px;top:470px;bottom:140px;justify-content:center;text-align:center}
 .L-cta-save .fi{align-items:center;gap:calc(28px*var(--k))}
 .L-cta-save .H{font-size:calc(100px*var(--k))}
