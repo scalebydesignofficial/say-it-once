@@ -6,7 +6,7 @@ Goal: take everything they gave you and produce a complete, checked, ready-to-po
 
 Run `python3 scripts/doctor.py`. If profile, voice, or design are missing, do the setup first (see `CLAUDE.md`). If no browser is found, tell them to install Google Chrome and stop.
 
-Read: `config.json`, `brand/profile.md`, `brand/voice.md`, `brand/voice-samples.md`, `brand/offer.md`, `brand/brand.json`, `examples/gold-standard.md`, and `engine/copy-principles.md`. The last one decides what every piece is trying to do: make her reader feel seen, so she follows and engages.
+Read: `config.json`, `brand/profile.md`, `brand/voice.md`, `brand/voice-samples.md`, `brand/offer.md`, `brand/brand.json`, `examples/gold-standard.md`, `brand/copy-framework.md` (only if it has content), and `engine/copy-principles.md`. The last one decides what every piece is trying to do: make her reader feel seen, so she follows and engages.
 
 ## 0b. What should it make this time?
 
@@ -134,7 +134,7 @@ This writes, for each carousel, `carousel-animated.mp4` (all slides in one swipe
 ## 6b. Look for gaps
 
 Before you plan the calendar, ask yourself:
-- Does every piece pass the mirror test in `engine/copy-principles.md`? Could her reader say "that is me" within the first three lines? Rewrite the opening of any that could be about anyone.
+- Does every piece pass the mirror test in `engine/copy-principles.md`? Could her reader say "that is me" within the first three lines, and does the first line hit one clear gut-level need (the primal layer)? Rewrite the opening of any that could be about anyone.
 - Did any piece make a claim or tell a story that is not in the source?
 - Did any two pieces feel like the same piece?
 - Is every next step real (a link or keyword that exists)?

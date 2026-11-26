@@ -1,4 +1,4 @@
-# Copy principles: make her people feel seen
+# Copy principles: make her people feel seen, and reach the gut first
 
 Read this before writing any piece, and again when you check it. It sits on top of `brand/voice.md`. The voice file decides how the words sound. This file decides what the words are trying to do.
 
@@ -14,6 +14,36 @@ These come first, because direct copy can slide into hype.
 - No fake urgency, fake scarcity, or fear. Only use a deadline or limit she gave you.
 - Agitate honestly. Name what the problem costs her reader in plain words. Never shame her, never scare her, never promise a result.
 - Keep the one next step from `brand/offer.md`.
+
+## The primal layer: reach the gut first
+
+People decide with instinct and feeling first, then use logic to justify what they already feel. So every piece has to land a gut-level need before it explains anything. Think of the order as gut, then heart, then head. This is a practical writing habit, not a claim about brain science.
+
+Pick ONE primal need per piece, taken from the source and her profile:
+- **Safety and relief:** a weight lifted, a worry eased, "you can stop carrying this."
+- **Belonging:** "you are not the only one," "someone finally said it."
+- **Respect and status:** being seen as capable, valued, taken seriously, not a small thing.
+- **Significance:** "your life and your gift matter."
+- **Hope and progress:** one small, visible win she can reach soon.
+- **Protecting what is hers:** her family, her calling, her time, her peace.
+- **Curiosity:** an open question she needs answered.
+
+Then use these tools:
+1. **Pain you can feel.** Name it as a moment in the day or a feeling in the body: the Sunday-night tightness, the three notebooks on the shelf. Not "burnout" or "lack of clarity."
+2. **Pictures over ideas.** One concrete image beats a paragraph of concepts. Short, plain, sensory words.
+3. **Contrast.** Stuck next to free. What staying where she is costs next to what moving gives. Two clear pictures she can choose between.
+4. **Loss before gain, honestly.** People feel a loss more than a gain, so name what staying stuck costs her. Only costs the source or her profile actually names, said gently. Never scare, shame, or invent.
+5. **Identity.** Speak to who she already is or is becoming ("you are the woman who keeps everything running"). Only identities her audience profile supports.
+6. **Proof only if real.** A quote, result, or story only if it is in the source, exact and short. Never made up.
+7. **An open loop that pays off.** Make her want the next line, then keep the promise.
+8. **Easy to act on.** A tired mind acts on one simple thing. One idea, one picture, one step.
+9. **Feeling before logic.** Order each piece: the scene or feeling first, the teaching second, permission to act third.
+
+The line it must never cross: this is honest resonance, not manipulation. Relief, belonging, and hope are the main notes. Fear is only ever an honest cost, said with care. Never use someone's shame, grief, or trauma as a lever. If a technique would need an invented story, number, or deadline, drop it and use another.
+
+### Her own framework
+
+If `brand/copy-framework.md` has content, read it and use it alongside everything here. It is the owner's own method (for example, notes from a copywriting course she bought). It adds to these ideas, and it never overrides the rules that never bend. If a step in it asks for something invented or pressuring, skip that step and say so in the review file.
 
 ## 1. Enter the conversation already in her head
 
@@ -71,6 +101,9 @@ Before a piece is done, check:
 3. **One:** one reader, one idea, one next step?
 4. **True:** is every claim, story, and number from the source?
 5. **Her:** would she say this out loud? (Read it against `brand/voice.md`.)
+6. **Gut:** can you name the one primal need the first lines hit (relief, belonging, respect, significance, hope, protection, curiosity)?
+7. **Picture:** is there at least one concrete image or moment she can see, not just ideas?
+8. **Order:** does the feeling come before the explanation, and the invitation after?
 
 If any answer is no, rewrite the opening from scratch. Do not just swap words.
 

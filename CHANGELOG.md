@@ -1,11 +1,18 @@
 # What's new
 
+## 1.2.2
+- Sharper copy. Every piece now aims at one gut-level need first (relief, belonging, respect, hope) using pictures, contrast and honest loss, then explains, then invites. There is also a place to paste your own copywriting method (`brand/copy-framework.md`) and Claude follows it every time. Nothing is ever invented or used to pressure.
+- Dark brands get a matching page: a dark top section with your accent color and script line, then a light reading page with numbered labels. Heading weight is now a setting (`heading_weight`), and note cards keep your soft accent color true on dark designs.
+- The setup guide is easier to read: each part has its own colored band, every step is a numbered card, and the "you should see" notes stand out.
+- You now learn the words that update your pages. After you change a carousel in the editor, say "I am done editing" and your page, PDF and videos match.
+- Carousel Studio: the big number on Editorial slides now follows the small number you type, and a dash hides it. Note cards keep your soft color true on dark designs.
+- The content page no longer shows dark text on a dark box when your soft color is dark.
+
 ## 1.2.1
 - A fresh new look. The setup guide (START-HERE.html) is now a dark, magazine-style page with bigger serif headings, small all-caps labels, numbered steps and a handwritten touch.
 - Your content pack page has the same new layout: bold titles, labels, sharp framed cards and cleaner buttons. It still uses your own colors and fonts.
 - The picture preview page (00-preview.html) is now a dark gallery with framed slides.
 - Your content calendar has a cleaner, easier-to-scan layout that still prints well.
-- Dark brands get a matching page: a dark top section with your accent color and script line, then a light reading page with numbered labels. Heading weight is now a setting (`heading_weight`), and note cards keep your soft accent color true on dark designs.
 
 ## 1.2.0
 - The setup guide now comes as a designed page too. Double-click START-HERE.html to read it in your browser, with Copy buttons for the words to say.

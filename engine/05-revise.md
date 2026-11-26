@@ -13,7 +13,7 @@ They will ask you to change finished work in plain words. Do it, check it, and t
 | "Animate this carousel" or "make it a Story" | `python3 scripts/animate.py <carousel folder>` (add `--size story` for 9:16). Needs ffmpeg. |
 | "Use my photos" or "lighter photos" | Photos go in `brand/photos/`. Change `photos.tone` to `light` or `photos.scrim` with `save_brand.py`, then re-render the batch. |
 | "More doodles" or "less decoration" | Change `decor` and `decor_theme` with `save_brand.py`, then re-render. |
-| "Make it more engaging", "stronger hook", "make it feel like she is talking to me" | Read `engine/copy-principles.md`. Rewrite the opening from scratch: find the mirror line, pick a different hook shape, cut warm-up. Keep their voice and the facts. Run the mirror test. |
+| "Make it more engaging", "stronger hook", "make it feel like she is talking to me" | Read `engine/copy-principles.md`. Rewrite the opening from scratch: find the mirror line, pick the one primal need it should hit (see the primal layer), pick a different hook shape, cut warm-up. Keep their voice and the facts. Run the mirror test. |
 | "Make it sound more like me" | Ask for one example of something that sounded right and one that did not. Update `brand/voice.md` and `brand/voice-samples.md`. Rewrite the pieces they pointed at. |
 | "More of X" (more threads, more quotes) | Read the extraction, pick unused angles, add the new pieces, run the checks, and update the calendar. |
 | "Take out the word Y" or "never say Y" | Add Y to `config.json` `rules.ban_words`. Fix existing pieces. |

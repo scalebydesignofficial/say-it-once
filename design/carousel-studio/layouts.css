@@ -147,6 +147,7 @@
 .L-editorial .mast2{position:absolute;left:84px;right:84px;top:172px;border-top:1px solid var(--fg)}
 .L-editorial .idx{position:absolute;left:84px;top:200px;font:400 210px/1 var(--f-head);color:var(--accent);opacity:.95}
 .L-editorial .fitbox{left:84px;right:84px;top:440px;bottom:150px}
+.L-editorial .fitbox.up{top:230px}
 .L-editorial .fi{gap:calc(30px*var(--k))}
 .L-editorial .K{font-size:calc(var(--kicker-size)*.9*var(--k))}
 .L-editorial .H{font-size:calc(112px*var(--k))}

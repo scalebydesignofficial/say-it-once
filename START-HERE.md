@@ -239,7 +239,7 @@ Your colors, your fonts, your photos.
 
 ### 36 carousel layouts
 
-In your colors. Each carousel in a pack gets its own look, and you can change any slide in the carousel editor. Just say "open my carousel editor."
+In your colors. Each carousel in a pack gets its own look, and you can change any slide in the carousel editor. Just say "open my carousel editor." When you finish changing things, click **Export** in the editor, then come back to Claude and say **"I am done editing."** That is what updates your content page, your PDF and your videos with your changes. Until you say it, your page still shows the old version.
 
 ### Photo backgrounds
 
@@ -261,6 +261,7 @@ Plain words work. Type them just like this.
 - "Add my photos to the carousels"
 - "Make the doodles more botanical"
 - "Open my carousel editor" (36 layouts, edit in your browser)
+- "I am done editing" (Say this after you change things in the editor. It updates your page, PDF and videos.)
 - "Update me" (Newest version. Your brand, voice, photos and packs are never touched.)
 - "Stop making blog posts" (or "start making LinkedIn")
 - "Animate this carousel for a Story"

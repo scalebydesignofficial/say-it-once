@@ -162,7 +162,7 @@ for S in sources:
         cap=open(d+"caption.md").read().strip()
         phrase=e('Open my carousel editor for the carousel "'+j['title']+'"',quote=True)
         cid=nid('car')
-        inner+=f'<article class="card car" id="{cid}"><header><div><span class="k">Carousel, {len(imgs)} slides</span><h3>{e(j["title"])}</h3></div><button class="copy" data-copy="{e(cap,quote=True)}">Copy caption</button></header><div class="strip">{tags}</div>{dlrow}<div class="edit"><button class="copy studio" data-copy="{phrase}" data-toast="Copied. Now paste it into your chat with Claude and the Carousel Studio opens.">Edit in Carousel Studio</button><p>Click the button, then paste it into your chat with Claude. Claude opens the Carousel Studio for this carousel, where you can change the words, layouts, colors and photos. When you are done, tell Claude and this page gets updated.</p></div>{vid}<div class="body capt"><h4>Caption</h4>{md(cap)}</div></article>'
+        inner+=f'<article class="card car" id="{cid}"><header><div><span class="k">Carousel, {len(imgs)} slides</span><h3>{e(j["title"])}</h3></div><button class="copy" data-copy="{e(cap,quote=True)}">Copy caption</button></header><div class="strip">{tags}</div>{dlrow}<div class="edit"><button class="copy studio" data-copy="{phrase}" data-toast="Copied. Now paste it into your chat with Claude and the Carousel Studio opens.">Edit in Carousel Studio</button><p>Click the button, then paste it into your chat with Claude. Claude opens the Carousel Studio for this carousel, where you can change the words, layouts, colors and photos. When you are done, export in the editor, then say <b>&ldquo;I&rsquo;m done editing&rdquo;</b> to Claude. That updates this page with your changes. Until you say it, this page keeps showing the old version.</p></div>{vid}<div class="body capt"><h4>Caption</h4>{md(cap)}</div></article>'
     secs.append(section("carousels","Carousels","Swipe posts for Instagram and Facebook. Tap a slide to enlarge it.",inner))
     # quotes
     qj=json.load(open(S+"/quote-graphics/quotes.json"))["quotes"] if os.path.exists(S+"/quote-graphics/quotes.json") else []
@@ -277,7 +277,7 @@ if lum(bg)<.2:
 else:
     page_light=dict(bg=bg,ink=ink,mut=mut,acc=acc,surf="#FFFFFF",line=mix(bg,ink,.12),acc2=acc2)
 L=page_light
-rep={"{{C_SURFACE}}":L["surf"],"{{C_BG}}":L["bg"],"{{C_INK}}":L["ink"],"{{C_MUTED}}":L["mut"],"{{C_LINE}}":L["line"],"{{C_ACCENT}}":L["acc"],"{{C_ACCENT_INK}}":"#FFFFFF" if lum(L["acc"])<.18 else "#131313","{{C_ACC2}}":L["acc2"],"{{SCRIPT}}":acc2,
+rep={"{{C_SURFACE}}":L["surf"],"{{C_BG}}":L["bg"],"{{C_INK}}":L["ink"],"{{C_MUTED}}":L["mut"],"{{C_LINE}}":L["line"],"{{C_ACCENT}}":L["acc"],"{{C_ACCENT_INK}}":"#FFFFFF" if lum(L["acc"])<.18 else "#131313","{{C_ACC2}}":L["acc2"],"{{C_ACC2_INK}}":("#F5F5F5" if lum(L["acc2"])<.3 else "#131313"),"{{SCRIPT}}":acc2,
 "{{D_BG}}":dk,"{{D_SURFACE}}":mix(dk,"#FFFFFF",.07),"{{D_LINE}}":mix(dk,"#FFFFFF",.17),"{{D_ACCENT}}":(acc if lum(bg)<.2 else (acc2 if lum(acc)<.2 else mix(acc,"#FFFFFF",.4))),"{{D_ACC2}}":mix(dk,"#FFFFFF",.14)}
 if lum(bg)<.2:
     # Dark brand: commit to one look (dark hero, light page) so it matches the brand board in any viewer theme.

@@ -50,7 +50,7 @@ If they hand you material before setup is done, say: "Love it. Two quick things 
 5. Every piece has a different angle. No two pieces open or close the same way.
 6. Fix transcript errors silently (garbled names, auto-caption mistakes). Never repeat a garble. If a number, name, or claim sounds wrong, put it in the review file instead of guessing.
 7. If the person quotes scripture and `config.json` has `check_scripture` on: paraphrase with the reference, quote exact words only when they did, and list every reference in the review file for them to check against their translation.
-8. Make her reader feel seen. Every piece follows `engine/copy-principles.md`: it starts inside her reader's situation in her reader's words, is specific, speaks to one woman, and points to one next step. The voice file decides how it sounds. The copy principles decide what it is trying to do. Never use the principles as a reason to invent a story, result, or deadline.
+8. Make her reader feel seen. Every piece follows `engine/copy-principles.md`: it starts inside her reader's situation in her reader's words, is specific, speaks to one woman, and points to one next step. It also lands one gut-level need (relief, belonging, respect, hope) before it explains anything, using the primal layer in that file and the owner's own `brand/copy-framework.md` if she has filled it in. The voice file decides how it sounds. The copy principles decide what it is trying to do. Never use the principles as a reason to invent a story, result, or deadline.
 9. Sound like a person, not an AI. Follow `brand/voice.md` and the rules in `config.json`. Then run `python3 scripts/check.py` and fix every error by rewriting the sentence from scratch. Swapping one word is not a fix.
 
 ## Where things live

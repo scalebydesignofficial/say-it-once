@@ -158,10 +158,15 @@
     fields: ["kicker", "headline", "body"],
     html: function (s, c, k) {
       var long = plain(s.body).length > 150;
-      var numKicker = !c.edit && /^\d{1,2}$/.test(String(s.kicker || "").trim());
+      var kv = String(s.kicker || "").trim();
+      var hide = kv === "-";
+      var isNum = /^\d{1,2}$/.test(kv);
+      var numKicker = !c.edit && (isNum || hide);
+      var big = isNum ? kv.padStart(2, "0") : String(c.i + 1).padStart(2, "0");
+      var kt = k.t("kicker", "K").replace(/data-ph="[^"]*"/, 'data-ph="Number, or - to hide it"');
       return '<div class="mast"><span>' + esc(c.name || "") + "</span><span>" + esc(c.handle || "") + '</span></div><div class="mast2"></div>' +
-        '<div class="idx">' + (numKicker ? esc(s.kicker) : String(c.i + 1).padStart(2, "0")) + "</div>" +
-        k.box("", (numKicker ? "" : k.t("kicker", "K")) + k.t("headline", "H") + k.t("body", "B" + (long ? "" : " one")));
+        (hide ? "" : '<div class="idx">' + esc(big) + "</div>") +
+        k.box(hide ? "up" : "", (numKicker ? "" : kt) + k.t("headline", "H") + k.t("body", "B" + (long ? "" : " one")));
     } });
 
   add({ id: "outline-word", name: "Outline word", group: "Type-led", roles: ["cover", "point"], photos: 0, tone: "on-dark",
