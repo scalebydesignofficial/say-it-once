@@ -1,6 +1,7 @@
 <title>{{TITLE}} Pack</title>
 <meta name="claude:viewport-fit-sides" content="cover">
 <link rel="stylesheet" href="{{FONT_LINK}}">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@500&display=swap">
 <style>
 /* Layout: a branded content library. Hero summary, sticky section chips, then one long scroll of cards with copy buttons. */
 :root{
@@ -92,17 +93,54 @@ h3.sub{font-family:var(--display);font-weight:var(--dw);font-size:1.15rem;margin
 footer{margin-top:3rem;color:var(--muted);font-size:.85rem}
 @media (prefers-reduced-motion:no-preference){html{scroll-behavior:smooth}}
 @media (max-width:520px){.card{padding:.9rem 1rem 1rem}.item{grid-template-columns:3.6rem 1fr}.item .pill{grid-column:2;justify-self:start}}
+/* Say It Once layout (BingeWorthy style): mono labels, big serif titles, handwritten accent, sharp framed cards. Colors and fonts stay the buyer's own. */
+:root{--mono:"DM Mono",ui-monospace,Menlo,monospace}
+.hero{padding-top:calc(env(safe-area-inset-top,0px) + 3.2rem);padding-bottom:2.6rem}
+.hero .hand{font-family:var(--mono);font-size:.78rem;letter-spacing:.24em;text-transform:uppercase;color:{{D_ACCENT}};margin:0 0 .9rem}
+.hero h1{font-size:clamp(2.4rem,7vw,4.4rem);line-height:.98;letter-spacing:-.03em}
+.hero .script{font-family:var(--hand);font-size:clamp(1.3rem,3.5vw,1.8rem);color:{{D_ACCENT}};transform:rotate(-2deg);transform-origin:left;display:inline-block;margin:.2rem 0 1rem;line-height:1.2}
+.stats span{font-family:var(--mono);font-size:.72rem;letter-spacing:.12em;text-transform:uppercase;border-radius:999px;padding:.4rem .9rem}
+.stats b{font-family:var(--display);font-size:1.05rem;letter-spacing:0;text-transform:none}
+nav.chips a{font-family:var(--mono);font-size:.7rem;letter-spacing:.12em;text-transform:uppercase;padding:.45rem .9rem}
+.sh h2{font-size:clamp(1.8rem,5vw,2.6rem);letter-spacing:-.02em;line-height:1.05}
+h3.sub{font-size:1.35rem;letter-spacing:-.01em}
+.card{border-width:1.5px;border-radius:4px;padding:1.25rem 1.4rem 1.4rem}
+.card .k{font-family:var(--mono);font-size:.7rem;letter-spacing:.2em;text-transform:uppercase;line-height:1.4}
+.card h3{font-family:var(--display);font-weight:var(--dw);font-size:1.35rem;letter-spacing:-.01em;line-height:1.2}
+.copy,.dl,.btn{font-family:var(--mono)!important;font-size:.7rem!important;letter-spacing:.14em;text-transform:uppercase;font-weight:500!important;padding:.5rem 1rem!important}
+.tn span{font-family:var(--display);font-style:italic;font-weight:400}
+.spoken,.edit,.seo{border-radius:4px}
+.slide,.qcell{border-radius:4px}
+.day{border-radius:4px;border-width:1.5px}
+.dh{font-family:var(--mono);font-size:.7rem;letter-spacing:.14em;text-transform:uppercase}
+.dh b{letter-spacing:0;text-transform:none;font-size:1.1rem}
+.pill{font-family:var(--mono);font-weight:500}
+footer .script{font-family:var(--hand);font-size:1.4rem;color:var(--accent);display:block;margin-bottom:.3rem}
+/* Brand-board look: dark hero with gold label, uppercase serif title and lavender script; light reading page with mono numbers and italic accent words. */
+.hero{background:{{D_BG}};color:#F5F5F5}
+.hero .hand{color:{{D_ACCENT}}}
+.hero h1{text-transform:uppercase;font-weight:var(--dw);letter-spacing:-.01em;line-height:1;color:#F5F5F5}
+.hero h1 em{font-style:normal;color:{{D_ACCENT}}}
+.hero .script{transform:none;font-style:italic;font-weight:500;color:{{SCRIPT}};font-size:clamp(1.6rem,4.4vw,2.4rem);margin:.6rem 0 1.1rem}
+.hero p.lede{color:#BCBCBC}
+.hero .stats span{background:transparent;color:#F5F5F5;border:1px solid rgba(245,245,245,.24)}
+.hero .stats b{color:{{D_ACCENT}}}
+.eb{font-family:var(--mono);font-size:.72rem;letter-spacing:.22em;text-transform:uppercase;color:var(--accent)!important;margin:0 0 .5rem!important}
+.sh h2{font-weight:var(--dw)}
+.sh h2 em{font-style:italic;color:var(--accent);font-weight:400}
+footer .script{font-style:italic;font-weight:500;font-size:1.6rem}
 </style>
 <header class="hero"><div class="wrap">
   <p class="hand">Your content pack</p>
-  <h1>{{TITLE}}</h1>
+  <h1>{{TITLE_H1}}</h1>
+  <p class="script">say it once. post it everywhere.</p>
   <p class="lede">Everything made from your material, in one place. Copy any piece, tap any image to enlarge it, and follow the calendar day by day.</p>
   <div class="stats">{{STATS}}</div>
 </div></header>
 <nav class="chips" aria-label="Sections"><div class="wrap">{{NAV}}</div></nav>
 <main>
 {{BODY}}
-<div class="wrap"><footer>Nothing here has been posted. You publish when you are ready.</footer></div>
+<div class="wrap"><footer><span class="script">say it once. post it everywhere.</span>Nothing here has been posted. You publish when you are ready.</footer></div>
 </main>
 <div id="lb" hidden><img alt=""><button id="lbdl" class="dl" type="button">Download image</button></div>
 <div id="toast" role="status" hidden></div>

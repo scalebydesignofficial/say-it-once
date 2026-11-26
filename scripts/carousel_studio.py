@@ -107,7 +107,7 @@ def brand_theme():
                    "muted": c.get("muted"), "dark": c.get("bg_dark") or c.get("ink"),
                    "paper": _paper(c.get("bg")), **extra},
         "fonts": {"head": head, "body": f.get("body") or "Poppins", "script": f.get("accent") or "Caveat"},
-        "head_weight": max(w for w in weights if w <= 700) if any(w <= 700 for w in weights) else weights[0],
+        "head_weight": f.get("heading_weight") or (max(w for w in weights if w <= 700) if any(w <= 700 for w in weights) else weights[0]),
         "head_case": "none", "head_track": "-0.01em", "kicker": "script", "quote_italic": True, "radius": 30,
     }
 

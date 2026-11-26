@@ -159,7 +159,7 @@
 .L-outline-word .B{font-size:calc(38px*var(--k));max-width:800px}
 .L-outline-word .K{font-size:calc(var(--kicker-size)*var(--k))}
 
-.L-note-card{background:color-mix(in srgb,var(--accent2) 70%,var(--bg))}
+.L-note-card{background:color-mix(in srgb,var(--accent2) 90%,var(--bg))}
 .L-note-card .card{position:absolute;left:100px;right:100px;top:150px;bottom:150px;background:var(--paper);transform:rotate(1.4deg);
   box-shadow:0 24px 50px rgba(0,0,0,.14);border-radius:10px;
   background-image:repeating-linear-gradient(to bottom,transparent 0 62px,color-mix(in srgb,var(--accent) 22%,transparent) 62px 64px);

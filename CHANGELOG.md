@@ -1,5 +1,12 @@
 # What's new
 
+## 1.2.1
+- A fresh new look. The setup guide (START-HERE.html) is now a dark, magazine-style page with bigger serif headings, small all-caps labels, numbered steps and a handwritten touch.
+- Your content pack page has the same new layout: bold titles, labels, sharp framed cards and cleaner buttons. It still uses your own colors and fonts.
+- The picture preview page (00-preview.html) is now a dark gallery with framed slides.
+- Your content calendar has a cleaner, easier-to-scan layout that still prints well.
+- Dark brands get a matching page: a dark top section with your accent color and script line, then a light reading page with numbered labels. Heading weight is now a setting (`heading_weight`), and note cards keep your soft accent color true on dark designs.
+
 ## 1.2.0
 - The setup guide now comes as a designed page too. Double-click START-HERE.html to read it in your browser, with Copy buttons for the words to say.
 - Every run now ends with one visual page. All your carousels, quote graphics, reels, posts, emails, articles and your calendar sit on a single page you can open with a link, with a Copy button on every piece. No more digging through folders.

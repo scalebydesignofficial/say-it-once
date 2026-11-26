@@ -179,17 +179,22 @@ def main():
     (base / "content-calendar.md").write_text("\n".join(md), encoding="utf-8")
 
     # html
-    h = ['<!doctype html><meta charset="utf-8"><title>Content calendar</title><style>'
-         'body{font:15px/1.45 system-ui,sans-serif;max-width:820px;margin:30px auto;padding:0 18px;color:#222}'
-         'h1{font-size:24px}h2{font-size:16px;margin:26px 0 8px;padding-bottom:4px;border-bottom:2px solid #222}'
-         '.item{display:flex;gap:12px;padding:8px 0;border-bottom:1px solid #eee}.time{width:78px;font-weight:700;flex:none}'
-         '.meta{color:#666;font-size:13px}.tag{display:inline-block;background:#eee;border-radius:4px;padding:1px 7px;font-size:12px;margin-right:6px}'
-         '@media print{body{margin:0}h2{break-after:avoid}.item{break-inside:avoid}}</style>',
-         f"<h1>Content calendar: {html.escape(plan.get('title', 'Your content'))}</h1>"]
+    h = ['<!doctype html><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Content calendar</title>'
+         '<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Libre+Caslon+Text:ital,wght@0,400;1,400&family=Inter+Tight:wght@400;500;700&family=DM+Mono:wght@500&display=swap"><style>'
+         'body{font:15px/1.5 "Inter Tight",system-ui,sans-serif;max-width:860px;margin:0 auto;padding:48px 20px 64px;color:#131313;background:#F5F5F5;-webkit-font-smoothing:antialiased}'
+         '.k{font:500 12px "DM Mono",ui-monospace,monospace;letter-spacing:.24em;text-transform:uppercase;color:#55524D;margin:0 0 12px}'
+         'h1{font:400 clamp(34px,5.5vw,56px)/1.02 "Libre Caslon Text",Georgia,serif;letter-spacing:-.03em;margin:0 0 28px}'
+         'h2{font:400 24px/1.15 "Libre Caslon Text",Georgia,serif;letter-spacing:-.01em;margin:34px 0 6px;padding-bottom:8px;border-bottom:1.5px solid #131313}'
+         'h2 em{font-style:italic;color:#55524D}'
+         '.item{display:flex;gap:14px;padding:12px 0;border-bottom:1px solid #DDDAD2}.time{width:80px;flex:none;font:500 12px/1.9 "DM Mono",ui-monospace,monospace;letter-spacing:.08em}'
+         '.meta{color:#55524D;font-size:13px}.tag{display:inline-block;border:1px solid #131313;border-radius:999px;padding:1px 9px;font:500 10px/1.8 "DM Mono",ui-monospace,monospace;letter-spacing:.12em;text-transform:uppercase;margin-right:6px}'
+         'strong{font-weight:700}'
+         '@media print{body{margin:0;padding:0;background:#fff}h2{break-after:avoid}.item{break-inside:avoid}}</style>',
+         f"<p class='k'>Content calendar</p><h1>{html.escape(plan.get('title', 'Your content'))}</h1>"]
     for date in sorted(by_date):
         items = by_date[date]
         d = dt.date.fromisoformat(date)
-        h.append(f"<h2>{d.strftime('%A, %B %d')} &middot; Day {items[0]['day']}</h2>")
+        h.append(f"<h2>{d.strftime('%A, %B %d')} <em>&middot; Day {items[0]['day']}</em></h2>")
         for r in items:
             h.append(f"<div class='item'><div class='time'>{html.escape(r['time'])}</div><div><span class='tag'>{html.escape(r['platform'])}</span>"
                      f"<span class='tag'>{html.escape(r['format'])}</span><strong>{html.escape(r['title'])}</strong>"

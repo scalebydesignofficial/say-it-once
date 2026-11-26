@@ -96,12 +96,16 @@ def split_pieces(path,default,prefix):
         if m: body="\n".join(lines[1:])
         pieces.append((title,body,label))
     return pieces
-NAV=[];SUF="";MP="";LABEL=""
+NAV=[];SUF="";MP="";LABEL="";SECN=[0]
 def section(id,title,intro,inner,cls=""):
     if not re.sub(r"<[^>]+>","",inner).strip() and "<img" not in inner: return ""
     id=id+SUF; title=title+(" ("+LABEL+")" if SUF else "")
     NAV.append((id,title))
-    return f'<section id="{id}" class="sec {cls}"><div class="wrap"><div class="sh"><h2>{e(title)}</h2><p>{e(intro)}</p></div>{inner}</div></section>'
+    SECN[0]+=1
+    base,_,tail=title.partition(" (")
+    ws=base.rsplit(" ",1)
+    h2=(e(ws[0])+" <em>"+e(ws[1])+"</em>" if len(ws)==2 else "<em>"+e(base)+"</em>")+(" ("+e(tail) if tail else "")
+    return f'<section id="{id}" class="sec {cls}"><div class="wrap"><div class="sh"><p class="eb">{SECN[0]:02d} &middot; Section</p><h2>{h2}</h2><p>{e(intro)}</p></div>{inner}</div></section>'
 
 
 def refresh():
@@ -251,7 +255,7 @@ fonts=brand.get("fonts",{})
 D=fonts.get("heading","Playfair Display"); B=fonts.get("body","Inter"); H=fonts.get("accent","Caveat")
 single={"Archivo Black","Bebas Neue","DM Serif Display","Caveat","Dancing Script"}
 def gf(f,w): return "family="+f.replace(" ","+")+(":wght@"+w if w else "")
-link="https://fonts.googleapis.com/css2?"+"&".join([gf(D,"" if D in single else "400;700"),gf(B,"400;500;700"),gf(H,"600" if H in ("Caveat",) else "")])+"&display=swap"
+link="https://fonts.googleapis.com/css2?"+"&".join([("family="+D.replace(" ","+")+":ital,wght@0,400;0,700;1,400" if D in ("Lora","Playfair Display") else gf(D,"" if D in single else "400;700")),gf(B,"400;500;700"),("family=Cormorant+Garamond:ital,wght@0,500;1,500" if H=="Cormorant Garamond" else gf(H,"600" if H in ("Caveat",) else ""))])+"&display=swap"
 tpl=open(HERE+"/artifact_template.html").read()
 
 def _rgb(h): h=h.lstrip("#"); return [int(h[i:i+2],16) for i in (0,2,4)]
@@ -262,11 +266,27 @@ def lum(h):
 cols=brand.get("colors",{})
 def C(k,d): return (cols.get(k) or d).upper()
 bg=C("bg","#F5F5F5"); ink=C("ink","#131313"); acc=C("accent","#C8102E"); acc2=C("accent2","#DACBF4"); mut=C("muted","#76766F"); dk=C("bg_dark","#131313")
-rep={"{{C_SURFACE}}":(mix(bg,"#FFFFFF",.07) if lum(bg)<.2 else "#FFFFFF"),"{{C_BG}}":bg,"{{C_INK}}":ink,"{{C_MUTED}}":mut,"{{C_LINE}}":mix(bg,ink,.12),"{{C_ACCENT}}":acc,"{{C_ACCENT_INK}}":"#FFFFFF" if lum(acc)<.18 else "#131313","{{C_ACC2}}":acc2,
-"{{D_BG}}":dk,"{{D_SURFACE}}":mix(dk,"#FFFFFF",.07),"{{D_LINE}}":mix(dk,"#FFFFFF",.17),"{{D_ACCENT}}":(acc2 if lum(acc)<.2 else mix(acc,"#FFFFFF",.4)),"{{D_ACC2}}":mix(dk,"#FFFFFF",.14)}
+# A dark brand gets a light reading page under a dark hero: off-white ground, dark ink, and a deeper
+# accent that stays readable on light. A brand can set these in brand.json under "page".
+pg=brand.get("page") or {}
+if lum(bg)<.2:
+    lbg=(pg.get("light_bg") or "#F5F5F5").upper(); link_=(pg.get("light_ink") or dk).upper()
+    lmut=(pg.get("light_muted") or mix(link_,"#FFFFFF",.35)).upper()
+    lacc=(pg.get("light_accent") or mix(acc2,"#000000",.62)).upper()
+    page_light=dict(bg=lbg,ink=link_,mut=lmut,acc=lacc,surf="#FFFFFF",line=mix(lbg,link_,.14),acc2=acc2)
+else:
+    page_light=dict(bg=bg,ink=ink,mut=mut,acc=acc,surf="#FFFFFF",line=mix(bg,ink,.12),acc2=acc2)
+L=page_light
+rep={"{{C_SURFACE}}":L["surf"],"{{C_BG}}":L["bg"],"{{C_INK}}":L["ink"],"{{C_MUTED}}":L["mut"],"{{C_LINE}}":L["line"],"{{C_ACCENT}}":L["acc"],"{{C_ACCENT_INK}}":"#FFFFFF" if lum(L["acc"])<.18 else "#131313","{{C_ACC2}}":L["acc2"],"{{SCRIPT}}":acc2,
+"{{D_BG}}":dk,"{{D_SURFACE}}":mix(dk,"#FFFFFF",.07),"{{D_LINE}}":mix(dk,"#FFFFFF",.17),"{{D_ACCENT}}":(acc if lum(bg)<.2 else (acc2 if lum(acc)<.2 else mix(acc,"#FFFFFF",.4))),"{{D_ACC2}}":mix(dk,"#FFFFFF",.14)}
+if lum(bg)<.2:
+    # Dark brand: commit to one look (dark hero, light page) so it matches the brand board in any viewer theme.
+    tpl="\n".join(l for l in tpl.split("\n") if not (l.startswith("@media (prefers-color-scheme: dark){:root") or l.startswith(':root[data-theme="dark"]{')))
 for k,v in rep.items(): tpl=tpl.replace(k,v)
-tpl=tpl.replace("{{FONT_LINK}}",link).replace("{{FONT_DISPLAY}}",D).replace("{{FONT_BODY}}",B).replace("{{FONT_HAND}}",H).replace("{{DW}}","400" if D in single else "700")
-out=tpl.replace("{{NAV}}",navh).replace("{{BODY}}","\n".join(secs)).replace("{{TITLE}}",e(plan_title)).replace("{{STATS}}",stats)
+tpl=tpl.replace("{{FONT_LINK}}",link).replace("{{FONT_DISPLAY}}",D).replace("{{FONT_BODY}}",B).replace("{{FONT_HAND}}",H).replace("{{DW}}",str(fonts.get("heading_weight") or ("400" if D in single else "700")))
+_w=plan_title.rsplit(" ",1)
+h1=(e(_w[0])+" <em>"+e(_w[1])+"</em>") if len(_w)==2 else e(plan_title)
+out=tpl.replace("{{TITLE_H1}}",h1).replace("{{NAV}}",navh).replace("{{BODY}}","\n".join(secs)).replace("{{TITLE}}",e(plan_title)).replace("{{STATS}}",stats)
 open(A+"/index.html","w").write(out)
 files=[{"path":os.path.relpath(p,A)} for p in sorted(glob.glob(A+"/f/**/*",recursive=True)) if os.path.isfile(p)]
 json.dump(files,open(A+"/files.json","w"))
